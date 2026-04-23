@@ -1,0 +1,13 @@
+Slide 1 - Boa tarde a todos.​ O meu projeto consiste no desenvolvimento de uma mesa sísmica com técnicas de impressão 3D orientado pelo professor Vítor Silva.​
+
+Slide 2 - O principal objetivo deste projeto é ter uma plataforma para que países em desenvolvimento e escolas possam ter uma mesa que simule sismos reais ou apenas frequências constantes a baixo custo de modo a poderem simular como estruras reagem a sismos e para ensino.​​
+Enquanto mesas como a da imagem simulam relativamente bem os efeitos de sismos em estruturas, as mesmas sofrem de 1 problema fundamentál, o seu preço.​
+Além disso a mesa da imagem move-se num só eixo, quando na realidade um sismo não atua só num eixo. Daí eu e o meu orientador termos chegado à conclusão que um design que andasse nos dois eixos, X e Y, fosse o ideal, com essa ideia em mente decidimos usar o design que vou mostrar de seguida.
+
+Slide 3 - Apesar de haver muitas mesas sísmicas a nível proficional e industrial, não existem nenhumas acessíveis com muita pesquisa não encontrei nenhuma equiparável ao que o professor Vítor pretende com este projeto. A única mesa que encontrei para venda ao público é a Quanser Shake Table II XY que para obter o preço é necessário pedir um orçamento mas estimativas apontam para ser mais do que 10000€​
+*Explicar abordagem*
+
+Slide 4 - *Explicar o que foi feito e porquê de ser feito*
+
+Slide 5 - *Mensionar a transição para os 4 motores e o aumento de dificuldade para tratar da mateática dos movimentos.*​
+*Mensionar funcionalidades extra pensadas para a mesa (Sismos, frequência constante, mover com o rato)*
