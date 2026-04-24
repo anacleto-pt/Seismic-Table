@@ -1,41 +1,36 @@
+import pandas as pd
+
 # Coluna 1 Tempo
 # Coluna 2 Aceleracao
 # Coluna 3 Deslocamento
 # Total Steps = (Distance in mm / Lead) * Steps Per Revolution * Microstepping
 
-import matplotlib.pyplot as plt
-import pandas as pd
+def Data(filename1, filename2):
+    ns = pd.read_csv(filename1)
+    ew = pd.read_csv(filename2)
+    ns.drop(ns.columns[1], axis=1, inplace=True)
+    ew.drop(ew.columns[1], axis=1, inplace=True)
+    return ns, ew
 
-def DataFix(filename):
-    data = []
-    with open(filename, 'r') as file:
-        lines = file.readlines()
-        for line in lines:
-            data.append(line.split(','))
-    return data
 
-def steps_calc(data, lead, step_angle, microstepping, adjustment):
-    displacement = []
-    [displacement.append(float(data[i][2])) for i in range(1, len(data))]
+def steps_calc(data1, data2, adjustment, microstepping, lead = 8, step_angle = 1.8):
     steps_per_revolution = 360 / step_angle
-    steps = {data[0][0]: 0}
-    for i in range(1, len(displacement)):
-        steps[data[i][0]] = int(adjustment * (((displacement[i] - displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping))
-    return steps
+    steps_N = []
+    steps_E = []
+    steps_S = []
+    steps_W = []
+    for i in range(1, len(data1.displacement)):
+        steps_N.append(int(adjustment * (((data1.displacement[i] - data1.displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping)))
+        steps_S.append(steps_N[-1] * -1)
+    for i in range(1, len(data2.displacement)):
+        steps_E.append(int(adjustment * (((data2.displacement[i] - data2.displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping)))
+        steps_W.append(steps_E[-1] * -1)
+    return steps_N, steps_E, steps_S, steps_W
 
-def dataplot(data):
-    time = []
-    displacement = []
-    for i in range(1, len(data)):
-        time.append(float(data[i][0]))
-        displacement.append(float(data[i][2]))
-    plt.plot(time, displacement)
-    plt.xlabel('Time (s)')
-    plt.ylabel('Displacement (m)')
-    plt.title('Time vs Displacement')
-    plt.grid()
-    plt.show()
-
-
-print(DataFix("Data/EW.csv")[0])
-print(steps_calc(DataFix("Data/EW.csv"), lead = 8, step_angle = 1.8, microstepping = 2, adjustment = 1))
+def print_cpp_arrays(name, data):
+    # Join the integers into a string separated by commas
+    array_content = ", ".join(map(str, data))
+    
+    print(f"\n// --- {name} Data ---")
+    print(f"int sismo_{name}[] = {{ {array_content} }};")
+    print(f"int sismo_{name}_len = {len(data)};")
