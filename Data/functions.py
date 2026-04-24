@@ -37,5 +37,5 @@ def dataplot(data):
     plt.show()
 
 
-print(DataFix("EW.csv")[0])
-print(steps_calc(DataFix("EW.csv"), lead = 8, step_angle = 1.8, microstepping = 2, adjustment = 1))
+print(DataFix("Data/EW.csv")[0])
+print(steps_calc(DataFix("Data/EW.csv"), lead = 8, step_angle = 1.8, microstepping = 2, adjustment = 1))

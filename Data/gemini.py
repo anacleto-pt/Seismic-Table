@@ -89,4 +89,4 @@ def main(file_ns, file_ew, l_mm=250.0, lead=8.0, step_angle=1.8, microstepping=2
     print(steps_w)
 
 if __name__ == "__main__":
-    main("NS.csv", "EW.csv")
+    main("Data/NS.csv", "Data/EW.csv")
