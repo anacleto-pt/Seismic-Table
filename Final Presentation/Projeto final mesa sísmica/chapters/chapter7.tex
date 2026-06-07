@@ -12,19 +12,77 @@ Este capítulo apresenta a metodologia de testes utilizada, os resultados obtido
 \section{Metodologia de Testes}
 \label{sec:metodologia-testes}
 
-% TODO: escrever conteúdo
+A validação do sistema foi estruturada em duas fases complementares, de modo a separar a verificação lógica da execução do firmware da verificação física do comportamento mecânico do sistema completo.
+
+A primeira fase consistiu na validação do \textit{software} e firmware, sem necessidade de medir fisicamente o deslocamento da plataforma. Para o pipeline Python, foram verificados manualmente os valores dos arrays gerados para amostras representativas do registo de El Centro, comparando os resultados da fórmula de conversão (\ref{eq:steps}) com cálculos independentes em folha de cálculo. Para o firmware, foi utilizada a telemetria série — capturada através do Serial Monitor e do Serial Plotter do Arduino IDE — para registar os perfis de velocidade dos quatro motores durante a reprodução do sismo. Estes perfis foram exportados em CSV e comparados com os perfis teóricos calculados diretamente a partir dos arrays de passos pré-calculados.
+
+A segunda fase consistiu em testes físicos com o sistema completamente montado, com o objetivo de verificar se os deslocamentos reais da plataforma correspondiam aos deslocamentos teóricos esperados, dado um número fixo e conhecido de passos de motor.
+
+% TODO: COMPLETAR --- Descreve os instrumentos e métodos utilizados nos testes físicos (ex: régua milimétrica afixada à plataforma e leitura visual, paquímetro digital, câmara de alta velocidade, sensor de posição por infravermelho, comparador de relógio). Indica o critério de aceitação adotado para considerar o resultado satisfatório (ex: erro máximo admissível de X\% no deslocamento absoluto ou X\,mm de desvio).
+
 
 \section{Testes de Movimento --- Verificação de Deslocamentos}
 \label{sec:testes-movimento}
 
-% TODO: escrever conteúdo
+Os testes de verificação de deslocamentos têm como objetivo determinar se a plataforma se desloca as distâncias esperadas quando submetida a sequências de passos de motor conhecidas e controladas. Para este efeito, foram programadas sequências de teste simples — com um número fixo e conhecido de passos, partindo da posição central da plataforma — e medido o deslocamento real da plataforma com a instrumentação disponível.
+
+O deslocamento teórico esperado para uma sequência de $N$ passos, com o fuso trapezoidal de \textit{lead} de 8\,mm e em modo de \textit{microstepping} $M_{\text{micro}}$, é dado por:
+
+\begin{equation}
+d_{\text{esperado}} = N \cdot \frac{\text{lead}}{M_{\text{micro}} \cdot \text{steps\_por\_rev}} = N \cdot \frac{8\,\text{mm}}{M_{\text{micro}} \cdot 200}
+\label{eq:deslocamento-esperado}
+\end{equation}
+
+% TODO: COMPLETAR --- Preenche a tabela abaixo com os resultados reais dos testes, indicando o número de passos enviado, o deslocamento esperado calculado pela Equação~\ref{eq:deslocamento-esperado}, o deslocamento medido fisicamente e o erro percentual. Se realizaste múltiplas medições para cada configuração, indica a média e o desvio padrão. Realiza os testes para os dois eixos (X e Y) de forma independente.
+
+\begin{table}[h]
+\centering
+\caption{Resultados dos testes de verificação de deslocamento.}
+\label{tab:testes-deslocamento}
+\begin{tabular}{ccccc}
+\hline
+\textbf{Eixo} & \textbf{Passos enviados} & \textbf{$d_{\text{esperado}}$ (mm)} & \textbf{$d_{\text{medido}}$ (mm)} & \textbf{Erro (\%)} \\
+\hline
+% TODO: preencher com valores reais das medições
+X & --- & --- & --- & --- \\
+Y & --- & --- & --- & --- \\
+\hline
+\end{tabular}
+\end{table}
+
+% TODO: COMPLETAR --- Comenta os resultados da tabela, discutindo se o deslocamento medido está dentro do critério de aceitação definido, as possíveis causas dos desvios observados (backlash, folgas mecânicas, erro de medição) e as implicações para a fidelidade da reprodução sísmica.
+
 
 \section{Comparação entre Perfil Simulado e Real}
 \label{sec:comparacao-perfil}
 
-% TODO: escrever conteúdo
+A comparação entre o perfil de velocidade simulado (calculado a partir dos arrays de passos pré-processados pelo script Python) e o perfil real (capturado via telemetria série durante a execução do firmware) constitui uma forma indireta de verificar a fidelidade da reprodução do registo sísmico, sem necessidade de instrumentação física de elevada precisão.
+
+O perfil de velocidade teórico para cada janela $i$ é calculado como:
+
+\begin{equation}
+v_{\text{teórico},i} = \frac{\text{steps}_i}{T_{\text{janela}}} = \frac{\text{steps}_i}{0{,}02\,\text{s}} \quad [\text{steps/s}]
+\label{eq:vel-teorica}
+\end{equation}
+
+O perfil de velocidade real foi obtido a partir da telemetria série, capturando os valores de velocidade emitidos pelo firmware a cada janela de 20\,ms durante a reprodução do sismo e exportando os dados para ficheiro CSV.
+
+% TODO: COMPLETAR --- Descreve os resultados da comparação entre o perfil teórico e o perfil capturado via série. Inclui, se disponível, uma figura (\texttt{\textbackslash{}includegraphics}) com o gráfico do perfil de velocidade teórico vs.\ capturado para o motor N (componente NS) e para o motor E (componente EW), ao longo dos 53 segundos do sismo. Indica o erro médio quadrático (RMSE) ou o erro percentual médio entre os dois perfis. Se os perfis forem praticamente coincidentes, menciona-o explicitamente como evidência da correção do firmware.
+
 
 \section{Análise de Erros e Limitações}
 \label{sec:analise-erros}
 
-% TODO: escrever conteúdo
+A análise crítica das fontes de erro e das limitações do sistema é fundamental para enquadrar corretamente os resultados obtidos e orientar o trabalho futuro.
+
+A primeira fonte de erro identificada é o \textit{jitter} de temporização associado à função \texttt{millis()} do ESP32. Esta função tem uma resolução de 1\,ms, o que implica um erro de temporização de até $\pm 1\,\text{ms}$ por janela, correspondendo a uma incerteza relativa de $\pm 5\%$ no período nominal de 20\,ms. Na prática, este erro manifesta-se como uma pequena variabilidade na duração efetiva de cada janela, que se propaga para uma imprecisão na velocidade instantânea dos motores. Embora o seu impacto prático seja limitado para os objetivos do projeto, para aplicações de maior precisão seria preferível utilizar os temporizadores de \textit{hardware} do ESP32 com resolução de microsegundos.
+
+A segunda fonte de erro é a truncagem inteira na conversão dos deslocamentos sísmicos para passos de motor (operação \texttt{int()} na Equação~\ref{eq:steps}). Este erro de quantização é máximo de $\pm 1$ passo por janela, correspondendo a um erro de deslocamento máximo de $\pm \text{lead} / (M_{\text{micro}} \cdot 200)$ por janela. A acumulação deste erro ao longo dos 2687 pontos do registo pode traduzir-se num desvio de posição absoluta relevante, embora sem impacto significativo no perfil dinâmico reproduzido, dado que a grandeza relevante para a resposta estrutural é a história de deslocamentos relativos e não a posição absoluta final.
+
+A terceira fonte de erro é a folga mecânica (\textit{backlash}) existente na interface entre o fuso e a porca trapezoidal. Quando o sentido de movimento se inverte, a folga introduz um atraso no início do deslocamento efetivo da plataforma, correspondente ao ângulo de folga acumulado na porca. Este fenómeno é particularmente relevante nas inversões frequentes de sentido que caracterizam um perfil sísmico, podendo introduzir um erro sistemático nos deslocamentos medidos.
+
+% TODO: COMPLETAR --- Indica o valor de folga (\textit{backlash}) medido nos fusos de cada eixo, se disponível (ex: determinado por medição com comparador de relógio após inversão controlada do sentido de rotação do motor por um número fixo de passos, com e sem inversão prévia). Discute se este valor é aceitável face aos deslocamentos totais do sismo de El Centro.
+
+Por fim, a ausência de sensor de posição implica que o sistema opera em malha aberta, sem capacidade de detetar e corrigir eventuais perdas de passo. A perda de passo pode ocorrer quando a força de carga sobre o motor excede o torque disponível à velocidade de operação, situação que pode verificar-se nos picos de velocidade do registo sísmico. Na ocorrência de perda de passo, a posição real da plataforma diverge progressivamente da posição teórica sem que o sistema o detete, o que pode comprometer a fidelidade da reprodução sísmica.
+
+% TODO: COMPLETAR --- Indica se foi observada perda de passo durante os testes físicos e em que condições (velocidade, carga sobre a plataforma, temperatura dos motores). Se foram utilizadas reduções no fator de ajuste \texttt{adjustment} para evitar velocidades excessivas, indica os valores testados e o critério de seleção do valor final.

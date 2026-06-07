@@ -12,72 +12,157 @@ Este capítulo detalha o design e a implementação do hardware do sistema, abra
 \section{Estrutura Mecânica e Design 3D}
 \label{sec:estrutura-mecanica}
 
-% TODO: escrever conteúdo
+A estrutura mecânica da mesa sísmica constitui o elemento central do sistema, sendo responsável pela transmissão e guiamento do movimento gerado pelos atuadores. A adoção da impressão 3D por deposição de material fundido (FDM) como tecnologia de fabrico exclusiva para os componentes estruturais foi uma decisão estratégica orientada para o baixo custo, a personalização geométrica e a reprodutibilidade. Esta abordagem permite que qualquer utilizador com acesso a uma impressora 3D FDM de gama de entrada possa fabricar todos os componentes necessários a partir dos ficheiros de modelação disponibilizados publicamente no repositório do projeto.
+
+A estrutura divide-se em dois níveis cinématicos sobrepostos. O nível inferior compreende a base fixa e o conjunto de atuação do eixo~Y, composto pelos motores N e S, pelos respetivos fusos e porcas trapezoidais e pelas guias lineares de orientação Norte-Sul. O nível superior compreende a plataforma intermédia — que desliza sobre as guias do eixo~Y —, o conjunto de atuação do eixo~X (motores E e W, fusos e guias de orientação Este-Oeste) e a plataforma superior, onde são posicionados os modelos estruturais a ensaiar.
+
 
 \subsection{Escolha do Mecanismo de Translação}
 \label{subsec:mecanismo-translacao}
 
-% TODO: escrever conteúdo
+A seleção do mecanismo de translação linear é uma das decisões mais determinantes no design de uma mesa sísmica, pois influencia diretamente a resolução de posicionamento, a capacidade de carga, o custo e a complexidade de montagem. Foram consideradas duas opções principais: correias dentadas e fusos trapezoidais.
+
+As correias dentadas oferecem velocidades de translação mais elevadas e menor atrito, sendo frequentemente utilizadas em impressoras 3D e plotters de corte. No entanto, apresentam maior elasticidade e suscetibilidade a \textit{backlash}, o que compromete a precisão de posicionamento para aplicações onde a fidelidade ao perfil sísmico é crítica. Os fusos trapezoidais, por outro lado, oferecem maior rigidez mecânica, menor \textit{backlash} intrínseco e maior capacidade de carga, sendo a solução preferida em aplicações de posicionamento de precisão de baixa a média velocidade.
+
+O fuso trapezoidal selecionado possui um \textit{lead} de 8\,mm por revolução, o que significa que uma rotação completa do motor produz 8\,mm de deslocamento linear. Este valor foi escolhido como compromisso entre resolução e velocidade máxima: com um motor de 200 passos por revolução em modo \textit{full-step}, a resolução linear é de $8\,\text{mm} / 200 = 0{,}04\,\text{mm}$ por passo, enquanto com \textit{microstepping} de $1/8$ a resolução melhora para $0{,}005\,\text{mm}$ por passo. A velocidade máxima teórica é limitada pela frequência máxima de passo que os \textit{drivers} DRV8825 e o firmware do ESP32 conseguem gerar de forma fiável.
+
 
 \subsection{Modelação e Impressão 3D}
 \label{subsec:modelacao-3d}
 
-% TODO: escrever conteúdo
+% TODO: COMPLETAR --- Indica o software de CAD utilizado para a modelação 3D das peças (ex: Fusion 360, FreeCAD, SolidWorks, Onshape, etc.).
+
+% TODO: COMPLETAR --- Indica o material utilizado na impressão (PLA, PETG, ABS ou outro), a percentagem e padrão de enchimento (\textit{infill}), a espessura de camada, a temperatura do bico e da mesa aquecida, e a velocidade de impressão. Indica também se foram necessários suportes e em que peças.
+
+As peças principais fabricadas por impressão 3D incluem os suportes de fixação dos fusos às plataformas, as porcas de fuso integradas nas plataformas móveis, os acoplamentos flexíveis entre os veios dos motores e os fusos, os suportes das guias lineares, os apoios dos motores e as plataformas superior e intermédia. O design de cada peça foi otimizado tendo em conta as limitações da impressão FDM, nomeadamente a anisotropia mecânica das peças impressas — que são mais resistentes na direção paralela às camadas do que na direção perpendicular — e a necessidade de minimizar o uso de suportes para garantir a qualidade superficial nas zonas funcionais.
+
 
 \subsection{Montagem e Tolerâncias}
 \label{subsec:montagem-tolerancias}
 
-% TODO: escrever conteúdo
+A montagem da estrutura mecânica requer atenção particular às tolerâncias dimensionais nas interfaces entre componentes impressos e componentes metálicos normalizados, como rolamentos lineares, varões de guia e fusos. As tolerâncias adotadas seguem as boas práticas estabelecidas para impressão FDM, onde é tipicamente necessário aplicar uma folga adicional de 0,1\,mm a 0,3\,mm em relação às dimensões nominais dos buracos e encaixes, de forma a compensar a ligeira sobreextrusão e as variações dimensionais inerentes ao processo de impressão.
+
+% TODO: COMPLETAR --- Descreve as tolerâncias específicas que aplicaste nas peças mais críticas: diâmetro dos furos para os varões de guia linear, diâmetro dos furos para os rolamentos, encaixe do acoplamento no veio do motor e no fuso. Indica se utilizaste \textit{heat-set inserts} de latão ou parafusos diretamente no plástico para as ligações roscadas mais solicitadas.
+
+A fixação dos componentes é realizada com recurso a parafusos métricos M3 e M4, com porcas hexagonais embebidas em cavidades impressas nas peças ou \textit{heat-set inserts} de latão instalados a quente, para garantir maior durabilidade nas interfaces sujeitas a montagem e desmontagem frequentes. O alinhamento dos fusos com os motores e com as porcas é assegurado pela geometria das peças impressas, sendo fundamental para evitar esforços transversais nos fusos que poderiam aumentar o atrito e reduzir o rendimento do sistema.
 
 
 \section{Sistema de Atuação --- Motores NEMA17}
 \label{sec:sistema-atuacao}
 
-% TODO: escrever conteúdo
+Os motores de passo do formato NEMA17 foram selecionados como atuadores do sistema por constituírem o padrão de facto em projetos de automação de baixo custo, combinando disponibilidade generalizada, custo reduzido, documentação extensa e compatibilidade com os \textit{drivers} e bibliotecas de controlo mais difundidos no ecossistema Arduino/ESP32.
+
 
 \subsection{Características dos Motores de Passo}
 \label{subsec:caracteristicas-motores}
 
-% TODO: escrever conteúdo
+Os motores NEMA17 são motores de passo bipolares com um ângulo de passo nominal de 1,8°, o que corresponde a 200 passos por revolução em modo \textit{full-step}. O formato NEMA17 define a dimensão da flange de montagem como 42,3\,mm $\times$ 42,3\,mm, tornando os motores deste formato intercambiáveis entre fabricantes no que respeita à fixação mecânica, desde que se respeitem as especificações elétricas.
+
+% TODO: COMPLETAR --- Indica o modelo exato dos motores NEMA17 utilizados e as suas especificações elétricas: tensão nominal, corrente nominal por fase, resistência por fase, indutância por fase e torque de retenção (\textit{holding torque}). Estas informações constam na ficha técnica do motor específico adquirido.
+
+Os motores de passo apresentam uma característica particularmente vantajosa para esta aplicação: o controlo de posição em malha aberta. Na ausência de perturbações externas excessivas, o motor segue fielmente as instruções de posição recebidas do controlador, sem necessidade de encoder ou outro sensor de realimentação. Esta propriedade simplifica significativamente a eletrónica de controlo e reduz o custo do sistema. A principal desvantagem desta abordagem é a possibilidade de perda de passo em condições de sobrecarga, situação em que o motor não consegue acompanhar as instruções recebidas e a posição real diverge da posição teórica sem que o sistema o detete ou corrija.
+
 
 \subsection{Cálculo de Torque e Velocidade}
 \label{subsec:calculo-torque}
 
-% TODO: escrever conteúdo
+A determinação dos requisitos de torque e velocidade dos motores é fundamental para garantir que o sistema é capaz de reproduzir fielmente o perfil sísmico sem ocorrência de perda de passo. A velocidade máxima necessária é ditada pelo pico de velocidade de deslocamento no registo sísmico de El Centro, após conversão para passos de motor por janela de 20\,ms.
+
+A velocidade instantânea de cada motor, em passos por segundo, é dada pela expressão:
+
+\begin{equation}
+v_{\text{steps/s}} = \frac{|\Delta\text{steps}|}{T_{\text{janela}}} = \frac{|\Delta\text{steps}|}{0{,}02\,\text{s}}
+\label{eq:velocidade-motor}
+\end{equation}
+
+onde $\Delta\text{steps}$ é o número de passos associado a uma janela temporal de 20\,ms e $T_{\text{janela}} = 0{,}02\,\text{s}$ é a duração de cada janela.
+
+% TODO: COMPLETAR --- Calcula e indica o valor máximo de $|\Delta\text{steps}|$ observado nos arrays de passos gerados pelo script Python (para a componente NS e para a componente EW), e a correspondente velocidade máxima em steps/s e em mm/s. Verifica se esta velocidade é compatível com as especificações do motor e do driver (frequência máxima de passo). Se a velocidade máxima for excessiva, discute o ajuste do fator de escala \texttt{adjustment} no script Python para reduzir a amplitude do movimento a valores praticáveis pelo hardware.
+
+% TODO: COMPLETAR --- Estima o torque necessário com base na massa da plataforma superior e dos modelos de teste mais pesados previstos, considerando o atrito nos fusos e guias. Compara com o torque de retenção do motor selecionado e conclui sobre a margem de segurança disponível.
 
 
 \section{Sistema de Controlo --- Joy-it CNC Kit}
 \label{sec:sistema-controlo}
 
-% TODO: escrever conteúdo
+O sistema de controlo integra o microcontrolador ESP32, a CNC Shield e os quatro \textit{drivers} DRV8825, num conjunto coeso que providencia a interface entre o firmware de controlo e os atuadores físicos, minimizando a cablagem manual e standardizando as ligações elétricas.
+
 
 \subsection{Arquitetura da CNC Shield}
 \label{subsec:arquitetura-cnc}
 
-% TODO: escrever conteúdo
+A CNC Shield utilizada é compatível com o formato de pinos do ESP32 de 38 pinos e foi concebida especificamente para aplicações de controlo de movimento com motores de passo. O seu principal papel é simplificar a ligação entre o microcontrolador e os \textit{drivers}, providenciando conectores normalizados para os módulos de \textit{driver} (slots X, Y, Z e A), blocos de terminais para a ligação dos motores (com 4 pinos por motor, correspondentes aos dois enrolamentos), pinos de sinal para fins de curso (\textit{endstops}) e um conector para a alimentação dos motores proveniente da fonte DC externa.
+
+Os quatro motores do sistema ocupam os quatro slots disponíveis na CNC Shield: o motor N (eixo~Y, polo Norte) está ligado ao slot~X; o motor E (eixo~X, polo Este) ao slot~Y; o motor S (eixo~Y, polo Sul) ao slot~Z; e o motor W (eixo~X, polo Oeste) ao slot~A. Esta nomenclatura foi adotada por conveniência de cablagem, não refletindo necessariamente a correspondência geográfica dos eixos.
+
+O pino Enable (EN) é partilhado entre todos os quatro \textit{drivers} e está ligado ao pino 13 do ESP32. Quando colocado a nível lógico baixo (LOW), todos os \textit{drivers} são ativados simultaneamente, energizando os enrolamentos dos motores e habilitando o controlo de movimento. Quando colocado a nível alto (HIGH), os \textit{drivers} são desativados, os motores perdem o torque de retenção e deixam de dissipar energia, o que é desejável nos períodos de inatividade para evitar o sobreaquecimento dos enrolamentos.
+
 
 \subsection{Microstepping e Configuração dos Drivers}
 \label{subsec:microstepping}
 
-% TODO: escrever conteúdo
+O \textit{driver} DRV8825 é um \textit{driver} de motor de passo bipolar integrado, desenvolvido pela Texas Instruments, que suporta modos de \textit{microstepping} de $1$ (full-step), $1/2$, $1/4$, $1/8$, $1/16$ e $1/32$, configuráveis através dos pinos M0, M1 e M2, acessíveis através de \textit{jumpers} na CNC Shield.
+
+O \textit{microstepping} divide cada passo nominal de 1,8° em múltiplos sub-passos, aumentando a resolução de posicionamento e suavizando o movimento do motor ao reduzir a vibração e o ruído mecânico. Em modo $1/8$, por exemplo, cada passo nominal é dividido em 8 sub-passos, resultando em $200 \times 8 = 1600$ passos por revolução e uma resolução linear de $8\,\text{mm} / 1600 = 0{,}005\,\text{mm}$ por sub-passo.
+
+% TODO: COMPLETAR --- Indica o modo de microstepping configurado nos jumpers da CNC Shield (ex: 1/8, 1/16, 1/4) e justifica a escolha em função da resolução de posicionamento necessária e da velocidade máxima admissível (velocidades mais elevadas em passos/s requerem menor microstepping).
+
+A corrente máxima fornecida pelo DRV8825 a cada fase do motor é regulada através do potenciómetro de ajuste de tensão de referência (V\textsubscript{ref}) existente em cada módulo de \textit{driver}. Para os módulos DRV8825 genéricos com resistência de \textit{sense} de 0,1\,$\Omega$, a corrente máxima de saída por fase é dada por:
+
+\begin{equation}
+I_{\text{max}} = \frac{V_{\text{ref}}}{5 \times R_{\text{sense}}} = \frac{V_{\text{ref}}}{0{,}5} = 2 \times V_{\text{ref}} \quad [\text{A}]
+\label{eq:corrente-drv8825}
+\end{equation}
+
+% TODO: COMPLETAR --- Indica o valor de V\textsubscript{ref} configurado em cada driver (medido com multímetro entre o pino central do potenciómetro e GND) e a correspondente corrente máxima, verificando que não excede a corrente nominal dos motores NEMA17 utilizados.
+
 
 \subsection{Mapeamento de Pinos ESP32 para CNC Shield}
 \label{subsec:mapeamento-pinos}
 
-% TODO: escrever conteúdo
+A Tabela~\ref{tab:mapeamento-pinos} apresenta o mapeamento entre os pinos do ESP32 e as funções correspondentes na CNC Shield, para cada um dos quatro motores, tal como implementado no firmware.
+
+\begin{table}[h]
+\centering
+\caption{Mapeamento de pinos ESP32 para a CNC Shield.}
+\label{tab:mapeamento-pinos}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Motor} & \textbf{Slot Shield} & \textbf{Pino STEP} & \textbf{Pino DIR} & \textbf{Eixo / Sentido} \\
+\hline
+Motor N & X & 4 & 25 & Eixo~Y / Norte ($+Y$) \\
+Motor E & Y & 26 & 27 & Eixo~X / Este ($+X$) \\
+Motor S & Z & 14 & 12 & Eixo~Y / Sul ($-Y$) \\
+Motor W & A & 32 & 33 & Eixo~X / Oeste ($-X$) \\
+Enable (todos) & --- & 13 & --- & LOW $=$ ativado \\
+\hline
+\end{tabular}
+\end{table}
+
+Os sinais STEP e DIR seguem a convenção padrão do protocolo de controlo de motores de passo: o pino DIR define a direção de rotação (HIGH ou LOW), enquanto cada flanco ascendente no pino STEP avança o motor de um passo (ou sub-passo, em modo de \textit{microstepping}). A biblioteca AccelStepper abstrai este protocolo, gerindo automaticamente os sinais STEP e DIR com base nas instruções de velocidade recebidas pelo firmware.
 
 
 \section{Microcontrolador --- ESP32}
 \label{sec:microcontrolador}
 
-% TODO: escrever conteúdo
+O ESP32, da empresa Espressif Systems, foi selecionado como microcontrolador central do sistema, substituindo alternativas mais tradicionais como o Arduino Uno ou o Arduino Mega. A sua escolha fundamenta-se num conjunto de características técnicas que o tornam particularmente adequado para esta aplicação.
+
 
 \subsection{Seleção e Justificação}
 \label{subsec:selecao-esp32}
 
-% TODO: escrever conteúdo
+O ESP32 é um sistema em chip (SoC) de 32 bits com arquitetura \textit{dual-core} Xtensa LX6, operando a uma frequência de relógio de até 240\,MHz. Dispõe de 34 pinos GPIO programáveis, dos quais dez são utilizados neste projeto para os sinais STEP, DIR e EN dos quatro motores. A abundância de GPIO elimina as limitações que um Arduino Uno (apenas 14 pinos digitais) imporia para o controlo simultâneo de quatro motores independentes.
+
+A comparação com o Arduino Uno é ilustrativa das vantagens do ESP32 para esta aplicação: enquanto o Arduino Uno opera a 16\,MHz com um único núcleo de processamento e dispõe de apenas 2\,KB de SRAM e 32\,KB de \textit{flash}, o ESP32 opera a 240\,MHz, possui 520\,KB de SRAM e até 4\,MB de \textit{flash}. Esta capacidade de memória é diretamente relevante para este projeto, dado que os arrays de dados sísmicos pré-calculados — com 2687 pontos para a componente NS e 2673 para a EW, multiplicados por quatro motores — ocupam uma fração significativa da memória disponível num microcontrolador de menor capacidade.
+
+Adicionalmente, o ESP32 integra módulos Wi-Fi (802.11 b/g/n) e Bluetooth 4.2, que, embora não utilizados na versão atual do firmware, representam um potencial relevante para trabalho futuro, nomeadamente para implementar uma interface de controlo remoto via rede local ou uma interface gráfica num dispositivo móvel. O custo unitário do ESP32, inferior a cinco euros em fornecedores de eletrónica genérica, é outro fator determinante para a sua seleção no contexto de um projeto orientado para o baixo custo.
+
 
 \subsection{Alimentação e Ligações}
 \label{subsec:alimentacao-ligacoes}
 
-% TODO: escrever conteúdo
+Durante o desenvolvimento e operação normal, o ESP32 é alimentado pela porta USB (5\,V), que providencia igualmente a interface de programação via Arduino IDE e a porta série para telemetria. Esta ligação é suficiente para o funcionamento do ESP32 e da lógica dos \textit{drivers} DRV8825, uma vez que a alimentação dos enrolamentos dos motores é garantida por uma fonte de alimentação DC externa dedicada.
+
+% TODO: COMPLETAR --- Indica a tensão e a corrente da fonte de alimentação DC externa utilizada para os motores (ex: 12\,V, 5\,A). Verifica que a corrente máxima da fonte é superior à soma das correntes máximas configuradas nos quatro drivers, com margem de segurança de pelo menos 20\%.
+
+A separação entre o domínio de alimentação lógica (USB, 5\,V/3,3\,V) e o domínio de alimentação dos motores é essencial para garantir a estabilidade dos sinais de controlo. Os planos de massa (GND) dos dois domínios devem ser interligados para garantir uma referência de tensão comum, sendo esta ligação tipicamente efetuada através dos conectores de alimentação da CNC Shield, que partilham o pino GND com o GND do ESP32.

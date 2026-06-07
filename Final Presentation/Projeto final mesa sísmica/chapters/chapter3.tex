@@ -12,14 +12,56 @@ Este capítulo define os requisitos funcionais e não funcionais do sistema, bem
 \section{Requisitos Funcionais}
 \label{sec:requisitos-funcionais}
 
-% TODO: escrever conteúdo
+Os requisitos funcionais descrevem os comportamentos e capacidades que o sistema deve exibir para cumprir os objetivos do projeto. Os requisitos foram estabelecidos com base na análise das necessidades do utilizador final — nomeadamente a utilização em contextos de ensino com recursos limitados — e nas restrições técnicas impostas pelos componentes selecionados.
+
+\begin{itemize}
+    \item \textbf{RF1 --- Movimento bi-axial:} A mesa deve mover-se de forma controlada em dois eixos horizontais independentes, designados por eixo~X (direção Este-Oeste) e eixo~Y (direção Norte-Sul), permitindo a simulação de excitações sísmicas bidimensionais.
+
+    \item \textbf{RF2 --- Reprodução de sismo real:} O sistema deve ser capaz de reproduzir o registo sísmico de El Centro de 1940, nas suas componentes Norte-Sul e Este-Oeste, a partir de dados de deslocamento pré-processados e codificados no firmware, cobrindo os aproximadamente 53 segundos de registo disponível.
+
+    \item \textbf{RF3 --- Modo de frequência constante:} O sistema deve suportar um modo de excitação sinusoidal com amplitude e frequência configuráveis pelo utilizador, permitindo o estudo do comportamento de estruturas em regime de excitação periódica estacionária.
+
+    \item \textbf{RF4 --- Controlo manual:} O sistema deve permitir o controlo manual da posição da plataforma, com possibilidade de movimentação livre e controlada pelo utilizador, para fins de calibração, demonstração e posicionamento inicial.
+
+    \item \textbf{RF5 --- Frequência de atualização de 50\,Hz:} O passo temporal de atualização das velocidades dos motores deve ser de 20\,ms (equivalente a 50 amostras por segundo), garantindo a fidelidade temporal na reprodução dos dados sísmicos pré-processados.
+
+    \item \textbf{RF6 --- Telemetria série:} O sistema deve emitir, em tempo real, a velocidade instantânea de cada um dos quatro motores através da porta série (UART), a uma taxa de transmissão de 115\,200\,baud, num formato compatível com ferramentas de monitorização como o Serial Plotter do Arduino IDE.
+
+    \item \textbf{RF7 --- Suporte de modelos de teste:} A plataforma superior da mesa deve possuir dimensões e resistência estrutural suficientes para suportar modelos reduzidos de estruturas, permitindo a observação visual do seu comportamento dinâmico durante os ensaios.
+\end{itemize}
+
 
 \section{Requisitos Não Funcionais}
 \label{sec:requisitos-nao-funcionais}
 
-% TODO: escrever conteúdo
+Os requisitos não funcionais definem atributos de qualidade e restrições operacionais que o sistema deve satisfazer, independentemente das funcionalidades específicas que implementa.
+
+\begin{itemize}
+    \item \textbf{RNF1 --- Custo:} O custo total do protótipo deve ser inferior a 500\,\euro{}, tornando-o acessível a instituições de ensino com orçamentos limitados e significativamente mais barato do que as soluções comerciais equivalentes.
+
+    \item \textbf{RNF2 --- Reprodutibilidade:} O projeto deve ser totalmente reprodutível por terceiros. Todos os ficheiros de modelação 3D, o firmware, os scripts Python e a documentação técnica devem estar disponíveis publicamente num repositório de acesso livre, sem necessidade de ferramentas de fabrico especializadas.
+
+    \item \textbf{RNF3 --- Segurança:} O sistema deve incorporar mecanismos de proteção que previnam danos por sobredeslocamento, nomeadamente fins de curso físicos ou lógicos que limitem o deslocamento máximo admissível da plataforma em cada eixo, evitando colisões destrutivas dos componentes móveis.
+
+    \item \textbf{RNF4 --- Facilidade de montagem:} A montagem do sistema deve ser realizável por um utilizador com conhecimentos técnicos básicos em eletrónica e impressão 3D, sem recurso a maquinagem especializada, equipamento de soldadura complexo ou ferramentas industriais.
+
+    \item \textbf{RNF5 --- Compatibilidade com ecossistema \textit{open-source}:} O firmware deve ser desenvolvido utilizando o Arduino IDE e bibliotecas \textit{open-source} (AccelStepper), garantindo a compatibilidade com a vasta comunidade de utilizadores do ecossistema Arduino/ESP32 e facilitando futuras adaptações por parte de terceiros.
+\end{itemize}
+
 
 \section{Restrições de Design}
 \label{sec:restricoes-design}
 
-% TODO: escrever conteúdo
+As restrições de design definem as fronteiras tecnológicas e económicas dentro das quais o projeto foi desenvolvido. Estas restrições resultam tanto de opções deliberadas orientadas para o baixo custo e a reprodutibilidade, como de limitações impostas pelos componentes selecionados.
+
+\begin{itemize}
+    \item \textbf{RD1 --- Componentes de baixo custo e disponibilidade comercial:} O sistema deve ser construído exclusivamente com componentes disponíveis em fornecedores de eletrónica genérica, tais como motores NEMA17, \textit{drivers} DRV8825, microcontrolador ESP32 e CNC Shield, evitando componentes proprietários ou de difícil aquisição em mercados internacionais.
+
+    \item \textbf{RD2 --- Estrutura mecânica em impressão 3D:} Todos os componentes mecânicos estruturais devem ser fabricados por impressão 3D por deposição de material fundido (FDM), sem recurso a maquinagem CNC ou outros processos de fabrico subtrativo, de forma a garantir a reprodutibilidade por qualquer utilizador com acesso a uma impressora FDM de gama de entrada.
+
+    \item \textbf{RD3 --- Mecanismo de translação por fuso trapezoidal:} O mecanismo de translação linear deve basear-se em fusos trapezoidais com \textit{lead} de 8\,mm por revolução, por oferecerem um equilíbrio adequado entre custo, precisão e capacidade de carga para esta aplicação, sem requerer lubrificação especializada nem manutenção frequente.
+
+    \item \textbf{RD4 --- Microcontrolador ESP32 com CNC Shield:} O sistema de controlo deve basear-se no microcontrolador ESP32 em conjunto com uma CNC Shield compatível, que providencia a interface normalizada entre o microcontrolador e os \textit{drivers} dos motores, simplificando significativamente a cablagem.
+
+    \item \textbf{RD5 --- Linguagens de programação:} O firmware deve ser desenvolvido em C++ com suporte para Arduino (ESP32) e o pré-processamento dos dados sísmicos deve ser realizado em Python, por serem linguagens amplamente difundidas, com suporte extensivo de bibliotecas \textit{open-source} relevantes para o projeto e com grande base de utilizadores na comunidade académica e de \textit{makers}.
+\end{itemize}

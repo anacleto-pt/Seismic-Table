@@ -12,19 +12,62 @@ Este capítulo revê o estado da arte em mesas sísmicas, cobrindo soluções co
 \section{Mesas Sísmicas --- Conceito e Aplicações}
 \label{sec:mesas-sismicas}
 
-% TODO: escrever conteúdo
+Uma mesa sísmica, também designada por \textit{shake table} na literatura anglófona, é um equipamento laboratorial concebido para reproduzir, de forma controlada, os movimentos do solo provocados por um sismo. O princípio de funcionamento baseia-se na imposição de deslocamentos ou acelerações a uma plataforma móvel, sobre a qual é colocado um modelo estrutural em escala reduzida ou um protótipo a escala real. Desta forma, é possível observar e quantificar a resposta dinâmica das estruturas face a excitações sísmicas, constituindo uma ferramenta indispensável no âmbito da engenharia sísmica experimental.
+
+As aplicações das mesas sísmicas são vastas e abrangem domínios distintos. No plano da investigação científica, permitem validar modelos numéricos de comportamento estrutural, calibrar parâmetros de amortecimento e avaliar a eficácia de soluções de proteção sísmica, como isoladores de base e amortecedores viscosos. No âmbito industrial, são utilizadas para ensaios de qualificação de equipamentos eletrónicos, instalações nucleares e componentes aeroespaciais que devem demonstrar resistência a excitações dinâmicas. No contexto do ensino e da divulgação científica, as mesas sísmicas permitem demonstrar de forma visual e intuitiva os princípios da dinâmica das estruturas, facilitando a compreensão de fenómenos como a ressonância, o amortecimento e a resposta espectral.
+
+Do ponto de vista tipológico, as mesas sísmicas classificam-se de acordo com o número de graus de liberdade que suportam. Os sistemas uni-axiais, os mais comuns em contexto académico e laboratorial de pequena escala, impõem movimento numa única direção horizontal. Os sistemas bi-axiais, como o desenvolvido no presente projeto, permitem a imposição simultânea de movimento em duas direções horizontais ortogonais, reproduzindo com maior fidelidade os registos sísmicos reais, que apresentam componentes em múltiplas direções. Os sistemas de seis graus de liberdade (6-DOF), utilizados em centros de investigação de referência mundial, são capazes de reproduzir simultaneamente as três componentes de translação e as três componentes de rotação do movimento do solo, sendo, no entanto, de elevada complexidade construtiva e custo.
+
+A utilização de mesas sísmicas de baixo custo em contextos educativos representa uma oportunidade significativa, em particular em países onde o risco sísmico é relevante mas os recursos financeiros para equipamento especializado são escassos. A democratização desta tecnologia contribui diretamente para a formação de engenheiros mais preparados para lidar com a problemática da segurança sísmica das construções.
+
 
 \section{Soluções Comerciais Existentes}
 \label{sec:solucoes-comerciais}
 
-% TODO: escrever conteúdo
+O mercado de mesas sísmicas para fins académicos e laboratoriais é dominado por um número reduzido de fabricantes especializados, cujos produtos apresentam, na sua generalidade, custos elevados que os tornam inacessíveis para a maioria das instituições de ensino superior em países em desenvolvimento.
+
+A solução comercial mais relevante identificada no contexto do presente projeto é a \textit{Quanser Shake Table II XY}, fabricada pela empresa canadiana Quanser. Trata-se de uma plataforma bi-axial, concebida especificamente para fins académicos e de investigação, dotada de software dedicado que permite o controlo preciso dos movimentos e a aquisição de dados em tempo real. O sistema inclui amplificadores de potência integrados, sensores de posição de alta resolução e compatibilidade com ambientes de simulação como MATLAB/Simulink. Não obstante as suas capacidades técnicas, o preço estimado da \textit{Quanser Shake Table II XY} é superior a dez mil euros, tornando-a uma opção economicamente inviável para escolas secundárias, universidades de países em desenvolvimento e projetos de investigação com financiamento limitado. Acresce que este produto requer uma consulta formal de orçamento ao fabricante, sem indicação de preço público, o que dificulta adicionalmente o acesso por parte de utilizadores com recursos limitados.
+
+Outras soluções comerciais de referência pertencem a fabricantes industriais como a MTS Systems Corporation e a Servotest Testing Systems. Estes sistemas destinam-se a ensaios de certificação em engenharia civil e mecânica, com capacidades de carga na ordem das toneladas e sistemas de atuação hidráulica de elevada potência. Os preços atingem frequentemente centenas de milhares de euros, colocando-os completamente fora do alcance de qualquer contexto académico de pequena escala.
+
+Constata-se, assim, uma lacuna significativa no mercado: não existe, ao nível das soluções comerciais, uma plataforma bi-axial de baixo custo orientada para o ensino e para contextos com recursos limitados. As soluções acessíveis tendem a ser uni-axiais e desprovidas de software de análise integrado, enquanto as soluções bi-axiais e tecnicamente completas são proibitivamente caras. É precisamente nesta lacuna que o presente projeto se posiciona.
+
 
 \section{Projetos Académicos e Low-Cost}
 \label{sec:projetos-academicos}
 
-% TODO: escrever conteúdo
+A literatura científica e técnica regista um número crescente de iniciativas académicas que visam desenvolver mesas sísmicas de baixo custo, motivadas pela inacessibilidade das soluções comerciais. A grande maioria destes projetos opta por microcontroladores da família Arduino ou compatíveis, motores de passo do formato NEMA17 ou NEMA23, e mecanismos de translação baseados em correias dentadas ou fusos de esferas.
+
+No que respeita ao número de eixos, a quase totalidade dos projetos académicos de baixo custo identificados na literatura implementa apenas um eixo de movimento. Esta limitação decorre, em grande medida, da complexidade acrescida que o segundo eixo introduz ao nível da sincronização dos motores, do design mecânico e do processamento dos dados sísmicos, que deixam de ser unidimensionais. Os sistemas uni-axiais são suficientes para demonstrar fenómenos como a ressonância e o comportamento de estruturas de um grau de liberdade, mas são incapazes de reproduzir fielmente registos sísmicos reais, que apresentam componentes em múltiplas direções ortogonais.
+
+No plano da estrutura mecânica, a maioria dos projetos académicos recorre a perfis de alumínio extrudido, madeira contraplacada ou chapas metálicas, não utilizando impressão 3D para os componentes estruturais. A utilização de impressão 3D para a totalidade dos componentes mecânicos é uma abordagem menos frequente, mas oferece vantagens significativas em termos de custo, personalização geométrica e reprodutibilidade, dado que os ficheiros de modelação podem ser distribuídos livremente e reproduzidos por qualquer utilizador com acesso a uma impressora FDM de gama de entrada.
+
+% TODO: COMPLETAR --- Se tiveres referências bibliográficas específicas (artigos, dissertações, repositórios GitHub) sobre projetos académicos de mesas sísmicas low-cost, adiciona-as aqui com \cite{} e comenta brevemente as características de cada um (eixos, custo, plataforma de controlo, mecanismo de translação).
+
+Não foi identificado, na revisão efetuada, nenhum projeto que combine simultaneamente as três características centrais do presente trabalho: dois eixos de movimento, estrutura integralmente fabricada por impressão 3D e reprodução de registos sísmicos reais a partir de dados históricos de acesso livre. Este conjunto de características diferencia o projeto desenvolvido face ao estado da arte existente.
+
 
 \section{Análise Comparativa e Lacunas Identificadas}
 \label{sec:analise-comparativa}
 
-% TODO: escrever conteúdo
+A análise das soluções existentes, tanto comerciais como académicas, permite sistematizar as características relevantes de cada abordagem e identificar as lacunas que o presente projeto visa preencher. A Tabela~\ref{tab:comparacao-solucoes} sintetiza esta comparação.
+
+\begin{table}[h]
+\centering
+\caption{Comparação entre soluções de mesas sísmicas existentes e o presente projeto.}
+\label{tab:comparacao-solucoes}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Solução} & \textbf{Eixos} & \textbf{Custo estimado} & \textbf{Impressão 3D} & \textbf{Sismos reais} \\
+\hline
+Quanser Shake Table II XY & 2 & $>$10\,000\,\euro{} & Não & Sim \\
+MTS / Servotest (industrial) & Até 6 & $>$100\,000\,\euro{} & Não & Sim \\
+Mesa académica típica & 1 & $\sim$100--300\,\euro{} & Não & Não \\
+Este projeto & 2 & $<$500\,\euro{} & Sim & Sim \\
+\hline
+\end{tabular}
+\end{table}
+
+Da análise da tabela ressaltam dois aspetos fundamentais. Por um lado, as soluções bi-axiais existentes têm custos proibitivos, inacessíveis para o contexto de aplicação visado. Por outro, as soluções de baixo custo são invariavelmente uni-axiais e não utilizam dados sísmicos reais, limitando a sua utilidade pedagógica e científica. O presente projeto procura preencher esta lacuna, combinando a capacidade bi-axial com um custo total inferior a quinhentos euros, uma estrutura reprodutível por impressão 3D e a reprodução fiel do registo sísmico de El Centro de 1940.
+
+A lacuna identificada é, portanto, clara: não existe atualmente uma solução bi-axial, de baixo custo, \textit{open-source} e fabricável com recurso a impressão 3D, capaz de reproduzir registos sísmicos históricos reais com resolução temporal de 20\,ms. O presente projeto representa uma contribuição original e prática para preencher esta lacuna, com potencial de impacto relevante em contextos educativos de recursos limitados.

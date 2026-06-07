@@ -12,14 +12,36 @@ Este capítulo apresenta a motivação e o contexto do projeto, os objetivos def
 \section{Motivação e Contexto}
 \label{sec:motivacao}
 
-% TODO: escrever conteúdo
+Portugal, pela sua posição geotectónica na confluência das placas Euro-Asiática e Africana, apresenta uma sismicidade historicamente relevante, com eventos de grande magnitude registados ao longo dos séculos. O sismo de 1755, que devastou Lisboa e originou um tsunami de proporções catastróficas, é o exemplo mais emblemático desta realidade. Este contexto estende-se igualmente a muitos outros países, sobretudo aos que se situam em zonas de elevada atividade sísmica e que, por razões económicas, dispõem de recursos limitados para a investigação e para o ensino na área da engenharia sísmica. A compreensão do comportamento dinâmico de estruturas face a excitações sísmicas é, por isso, um tema de elevada pertinência científica e social, com impacto direto na segurança das populações e na qualidade das práticas de ensino em engenharia.
+
+Neste enquadramento, o presente projeto nasceu de uma necessidade concreta identificada pelo professor Vítor Silva: no âmbito das suas atividades de investigação e cooperação técnica em países com recursos limitados, tornou-se evidente a falta de equipamento acessível para demonstrar, em ambiente de sala de aula ou de laboratório, o comportamento de estruturas sujeitas a excitações sísmicas. As mesas sísmicas disponíveis no mercado comercial, como a \textit{Quanser Shake Table II XY}, têm um custo estimado superior a dez mil euros, tornando-as inacessíveis para a grande maioria das instituições de ensino dos países em desenvolvimento. Acresce que muitas dessas soluções operam apenas num único eixo, não permitindo a simulação de registos sísmicos bidimensionais com as componentes horizontal e transversal do movimento.
+
+A impressão tridimensional emergiu, nas últimas décadas, como uma tecnologia transformadora no domínio da prototipagem e da fabricação de componentes mecânicos a baixo custo. A possibilidade de produzir peças personalizadas com geometrias complexas, a partir de materiais poliméricos amplamente disponíveis, democratizou o acesso ao desenvolvimento de equipamentos científicos que outrora exigiam processos de maquinagem especializados e dispendiosos. É neste contexto que a impressão 3D se apresenta como a abordagem tecnológica central do presente projeto, viabilizando a construção de uma mesa sísmica funcional, reprodutível e economicamente acessível. A disponibilização pública de todos os ficheiros de projeto — peças mecânicas, firmware e scripts de processamento de dados — garante que qualquer instituição possa replicar o sistema de forma autónoma, sem necessidade de acesso a recursos industriais ou comerciais.
+
 
 \section{Objetivos do Projeto}
 \label{sec:objetivos}
 
-% TODO: escrever conteúdo
+O presente projeto tem como objetivo principal o desenvolvimento de uma mesa sísmica de dois eixos — horizontal~(X) e transversal~(Y) — de baixo custo, recorrendo predominantemente a peças fabricadas por impressão 3D e a componentes eletrónicos de uso geral. Pretende-se que o sistema seja simultaneamente funcional, reprodutível e acessível, permitindo a sua utilização em contextos de ensino e investigação com recursos limitados. Para tal, foram definidos os seguintes objetivos específicos:
+
+\begin{itemize}
+    \item Projetar e fabricar, por impressão 3D, os componentes mecânicos estruturais da mesa sísmica, assegurando a rigidez necessária para o movimento bidirecional controlado;
+    \item Implementar um sistema de atuação baseado em quatro motores de passo NEMA17, controlados por \textit{drivers} DRV8825, com transmissão de movimento por fuso trapezoidal de \textit{lead} de 8\,mm por volta;
+    \item Desenvolver o firmware para o microcontrolador ESP32, utilizando a biblioteca AccelStepper, com suporte a uma janela de execução de 20\,ms por ponto de dados sísmicos;
+    \item Implementar um \textit{pipeline} de processamento de dados sísmicos em Python, capaz de converter registos históricos de deslocamento — nomeadamente o registo de El Centro (1940), nas componentes Norte-Sul e Este-Oeste — em sequências de passos de motor;
+    \item Suportar três modos de operação distintos: reprodução de sismo real a partir de dados históricos, excitação a frequência constante e controlo manual do movimento da plataforma;
+    \item Garantir a reprodutibilidade do sistema, disponibilizando publicamente todos os ficheiros necessários à construção de uma unidade idêntica, mantendo o custo total significativamente abaixo das soluções comerciais equivalentes.
+\end{itemize}
+
 
 \section{Estrutura do Documento}
 \label{sec:estrutura}
 
-% TODO: escrever conteúdo
+O presente documento encontra-se organizado em nove capítulos, estruturados de forma a acompanhar o processo de desenvolvimento do projeto desde a sua fundamentação teórica até à validação experimental.
+
+O Capítulo~2 apresenta o estado da arte, com uma revisão crítica das soluções comerciais e académicas de mesas sísmicas existentes, identificando as suas características, limitações e custos associados, e contextualizando as lacunas que o presente projeto visa colmatar. O Capítulo~3 define os requisitos funcionais e não funcionais do sistema, bem como as restrições de \textit{design} adotadas, estabelecendo as fronteiras dentro das quais o projeto foi desenvolvido.
+
+O Capítulo~4 descreve a arquitetura geral do sistema, detalhando a interação entre os subsistemas mecânico, elétrico e de software, e apresentando uma visão integrada da solução proposta. O Capítulo~5 apresenta em detalhe o \textit{hardware} desenvolvido, incluindo a estrutura mecânica impressa em 3D, o sistema de atuação com motores NEMA17 e o circuito de controlo baseado no microcontrolador ESP32. O Capítulo~6 detalha o software e o firmware implementados, abrangendo o \textit{pipeline} de processamento de dados sísmicos em Python e a lógica de controlo do movimento desenvolvida para o ESP32.
+
+O Capítulo~7 apresenta a metodologia de testes e os resultados da validação experimental do sistema, incluindo a análise dos erros e das limitações identificadas. O Capítulo~8 expõe a análise de custos do projeto e estabelece uma comparação com soluções comerciais equivalentes. Por fim, o Capítulo~9 apresenta as conclusões do trabalho realizado, sintetiza as limitações identificadas e propõe direções para trabalho futuro.
+

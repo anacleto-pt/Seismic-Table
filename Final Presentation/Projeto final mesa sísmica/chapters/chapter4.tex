@@ -12,19 +12,38 @@ Este capítulo apresenta a visão geral da arquitetura do sistema, descrevendo o
 \section{Visão Geral da Arquitetura}
 \label{sec:visao-geral}
 
-% TODO: escrever conteúdo
+O sistema desenvolvido organiza-se em três subsistemas interligados: o subsistema mecânico, responsável pela movimentação física da plataforma; o subsistema elétrico e eletrónico, encarregue do controlo dos atuadores e da gestão da energia; e o subsistema de software e firmware, que engloba o pré-processamento dos dados sísmicos e a lógica de controlo em tempo real.
+
+O fluxo de dados e de controlo no sistema segue uma cadeia sequencial bem definida. Na fase de pré-processamento, executada uma única vez antes da utilização do sistema, um script Python lê os ficheiros CSV com os dados de deslocamento do registo sísmico de El Centro de 1940 (componentes NS e EW) e converte-os em quatro arrays de valores inteiros — correspondentes aos quatro motores (N, E, S, W) — que são diretamente embebidos no firmware como arrays estáticos em C++. Na fase de execução em tempo real, o microcontrolador ESP32 percorre estes arrays sequencialmente a uma cadência de 50\,Hz (uma janela de 20\,ms por ponto de dados), calculando a velocidade instantânea de cada motor em passos por segundo e instruindo os respetivos \textit{drivers} DRV8825 através de sinais digitais STEP e DIR. Os \textit{drivers}, por sua vez, convertem estes sinais em corrente elétrica devidamente modulada, alimentando os enrolamentos dos motores de passo NEMA17. Por fim, os motores atuam os fusos trapezoidais, que convertem o movimento rotativo em deslocamento linear da plataforma nos eixos X e Y.
+
+Esta arquitetura de cadeia aberta (\textit{open-loop}) — sem realimentação de posição — foi adotada deliberadamente, em consonância com os requisitos de baixo custo e simplicidade de implementação. A ausência de encoders implica que não existe correção automática de eventuais perdas de passo, o que constitui uma das limitações do sistema, discutida no Capítulo~\ref{chapter:validation}.
+
 
 \section{Subsistema Mecânico}
 \label{sec:subsistema-mecanico}
 
-% TODO: escrever conteúdo
+O subsistema mecânico é responsável pela conversão do movimento rotativo dos motores em deslocamento linear controlado da plataforma, em dois eixos ortogonais. A sua arquitetura baseia-se numa estrutura de dois níveis: uma base fixa, que suporta o conjunto de atuação do eixo~Y (Norte-Sul), e uma plataforma intermédia que, por sua vez, suporta o conjunto de atuação do eixo~X (Este-Oeste) e a plataforma superior onde são colocados os modelos a ensaiar.
+
+Cada eixo de translação é acionado por um par de motores que atuam em oposição de fase: os motores N e S atuam sobre o eixo~Y, enquanto os motores E e W atuam sobre o eixo~X. A filosofia de utilizar dois motores por eixo, em vez de um único motor com transmissão central, simplifica o design mecânico e distribui a carga de forma mais equilibrada ao longo do eixo. Os fusos trapezoidais, com \textit{lead} de 8\,mm por revolução, convertem a rotação dos motores em deslocamento linear, enquanto guias lineares garantem que o movimento ocorre exclusivamente na direção pretendida, eliminando folgas laterais e rotações parasitas da plataforma.
+
+Todos os componentes estruturais — suportes dos fusos, acoplamentos, suportes das guias e plataformas — foram projetados em software de CAD e fabricados por impressão 3D, com o objetivo de minimizar o custo de fabrico e maximizar a acessibilidade e reprodutibilidade do projeto.
+
 
 \section{Subsistema Elétrico e Eletrónico}
 \label{sec:subsistema-eletrico}
 
-% TODO: escrever conteúdo
+O subsistema elétrico e eletrónico centraliza-se no microcontrolador ESP32, que funciona como unidade central de controlo e processamento. A CNC Shield, encaixada diretamente sobre o ESP32, providencia a interface física e elétrica entre o microcontrolador e os quatro \textit{drivers} DRV8825, um por motor. Esta arquitetura modular simplifica significativamente a cablagem e facilita a substituição de componentes em caso de avaria.
+
+A alimentação do sistema é bipartida: o ESP32 é alimentado pela porta USB durante o desenvolvimento e operação normal, enquanto os motores são alimentados por uma fonte de alimentação DC externa dedicada, com tensão e corrente adequadas aos motores NEMA17 utilizados. Esta separação elétrica entre o domínio lógico (ESP32 e lógica dos \textit{drivers}) e o domínio de potência (enrolamentos dos motores) é essencial para evitar perturbações nos sinais de controlo que poderiam causar comportamentos erráticos no firmware.
+
+O pino Enable (EN) dos \textit{drivers}, partilhado entre todos os quatro \textit{drivers} através da CNC Shield e ligado ao pino 13 do ESP32, é ativado (nível lógico baixo) antes do início de cada sequência de movimento e desativado (nível lógico alto) no final, permitindo o arrefecimento dos motores e a redução do consumo energético durante os períodos de inatividade.
+
 
 \section{Subsistema de Software e Firmware}
 \label{sec:subsistema-software}
 
-% TODO: escrever conteúdo
+O subsistema de software e firmware divide-se em dois componentes com ciclos de vida distintos. O primeiro componente é o script de pré-processamento em Python, que opera em modo \textit{offline} — executado uma única vez na fase de preparação do sistema — e cuja função é converter os dados sísmicos de deslocamento em arrays de velocidades de motor, prontos a ser embebidos no firmware. O segundo componente é o firmware em C++ para o ESP32, que opera em tempo real durante os ensaios, percorrendo os arrays pré-calculados e controlando os motores a uma cadência de 50\,Hz.
+
+A biblioteca AccelStepper é utilizada no firmware para o controlo de velocidade instantânea dos motores, em modo \texttt{runSpeed()}, que aplica a velocidade definida sem qualquer rampa de aceleração ou desaceleração. Esta escolha é justificada pelo facto de os dados sísmicos codificarem implicitamente a variação de velocidade entre janelas consecutivas, tornando qualquer aceleração adicional imposta pela biblioteca redundante e potencialmente distorciva do perfil sísmico real.
+
+A comunicação série, à taxa de 115\,200\,baud, serve como canal de telemetria, permitindo a monitorização em tempo real das velocidades instantâneas dos quatro motores durante a execução de uma sequência sísmica. O formato de saída CSV possibilita a captura e análise posterior dos dados com ferramentas como Python ou Excel.

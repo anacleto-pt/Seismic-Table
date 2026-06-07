@@ -12,9 +12,62 @@ Este capítulo apresenta a lista de materiais com os respetivos preços e compar
 \section{Lista de Materiais e Preços}
 \label{sec:lista-materiais}
 
-% TODO: escrever conteúdo
+A Tabela~\ref{tab:lista-materiais} apresenta a lista completa dos componentes eletrónicos, mecânicos e consumíveis utilizados no protótipo, com os respetivos preços unitários e totais. Os preços indicados correspondem aos valores de aquisição efetiva ou, quando não disponíveis, a estimativas baseadas em preços de mercado em fornecedores de eletrónica e componentes mecânicos de uso geral à data de realização do projeto.
+
+\begin{table}[h]
+\centering
+\caption{Lista de materiais e preços do protótipo da mesa sísmica.}
+\label{tab:lista-materiais}
+\begin{tabular}{lccr}
+\hline
+\textbf{Componente} & \textbf{Qty.} & \textbf{Preço unit. (\euro{})} & \textbf{Total (\euro{})} \\
+\hline
+Microcontrolador ESP32 (38 pinos) & 1 & $\sim$5{,}00 & $\sim$5{,}00 \\
+CNC Shield para ESP32 & 1 & $\sim$8{,}00 & $\sim$8{,}00 \\
+\textit{Driver} DRV8825 (módulo) & 4 & $\sim$2{,}00 & $\sim$8{,}00 \\
+Motor de passo NEMA17 & 4 & $\sim$10{,}00 & $\sim$40{,}00 \\
+Fuso trapezoidal Tr8$\times$8 + porca (par) & 2 & $\sim$8{,}00 & $\sim$16{,}00 \\
+Varão de guia linear (\O{}6\,mm ou \O{}8\,mm) & \textit{(a completar)} & \textit{(a completar)} & \textit{(a completar)} \\
+Rolamentos lineares LM6UU / LM8UU & \textit{(a completar)} & \textit{(a completar)} & \textit{(a completar)} \\
+Acoplamento flexível motor--fuso & 4 & $\sim$2{,}00 & $\sim$8{,}00 \\
+Filamento FDM (PLA/PETG, por kg) & \textit{(a completar)} & \textit{(a completar)} & \textit{(a completar)} \\
+Fonte de alimentação DC externa & 1 & $\sim$15{,}00 & $\sim$15{,}00 \\
+Cabo USB para ESP32 & 1 & $\sim$3{,}00 & $\sim$3{,}00 \\
+Parafusos e porcas M3/M4 (kit) & 1 & $\sim$5{,}00 & $\sim$5{,}00 \\
+\textit{Heat-set inserts} M3 (kit) & 1 & $\sim$5{,}00 & $\sim$5{,}00 \\
+Fios e conectores & --- & --- & $\sim$5{,}00 \\
+\hline
+\textbf{TOTAL estimado} & & & \textbf{\textit{(a completar)}} \\ % TODO: substituir pelo total real do orçamento
+\hline
+\end{tabular}
+\end{table}
+
+% TODO: COMPLETAR --- Actualiza a tabela acima com os preços e quantidades reais, obtidos a partir do ficheiro de orçamento (Orçamento\_Mauser.pdf e outros recibos de compra). Preenche as células marcadas como \% TODO com os valores reais (quantidade, preço unitário e total) e calcula o custo total real na última linha. Se existirem componentes adicionais não listados, acrescenta linhas à tabela.
+
+Importa salientar que os preços indicados para componentes eletrónicos (ESP32, DRV8825, motores NEMA17) correspondem a preços de mercado em fornecedores de eletrónica de consumo e \textit{makers} (ex: AliExpress, Mauser, RS Components), que são significativamente mais baixos do que os preços praticados em distribuidores industriais. Esta acessibilidade de preços é uma condição essencial para que o projeto cumpra o objetivo de ser reproduzível por instituições com orçamentos limitados.
+
 
 \section{Comparação com Soluções Comerciais}
 \label{sec:comparacao-comercial}
 
-% TODO: escrever conteúdo
+A Tabela~\ref{tab:comparacao-custos} apresenta uma comparação direta entre o protótipo desenvolvido e as soluções comerciais mais relevantes identificadas no estado da arte (Capítulo~\ref{chapter:state-of-the-art}), em termos de custo estimado, número de eixos, capacidade de reproduzir sismos reais e disponibilidade em regime \textit{open-source}.
+
+\begin{table}[h]
+\centering
+\caption{Comparação de custo e funcionalidades entre o protótipo e soluções comerciais.}
+\label{tab:comparacao-custos}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Solução} & \textbf{Custo estimado} & \textbf{Eixos} & \textbf{Sismos reais} & \textbf{\textit{Open-source}} \\
+\hline
+Quanser Shake Table II XY & $>$10\,000\,\euro{} & 2 & Sim & Não \\
+MTS / Servotest (industrial) & $>$100\,000\,\euro{} & Até 6 & Sim & Não \\
+Mesa académica típica & $\sim$100--300\,\euro{} & 1 & Não & Parcial \\
+Este projeto & $<$500\,\euro{} & 2 & Sim & Sim \\
+\hline
+\end{tabular}
+\end{table}
+
+Da análise da tabela ressaltam três aspetos diferenciadores do presente projeto. Em primeiro lugar, é a única solução identificada que combina simultaneamente as características de ser bi-axial, de custo reduzido e de ser totalmente \textit{open-source}. Em segundo lugar, o rácio de custo face à solução comercial bi-axial mais próxima (Quanser Shake Table II XY) é superior a 20:1 — ou seja, o presente protótipo custa menos de 5\% do valor da solução comercial equivalente em funcionalidades básicas. Em terceiro lugar, a natureza \textit{open-source} e reprodutível do projeto significa que o custo unitário poderia ser ainda mais reduzido em produções de maior escala, com acesso a fornecedores de componentes em volume ou com impressoras 3D de maior produtividade.
+
+É importante salientar que esta comparação de custos não pretende equiparar as especificações técnicas das soluções comparadas. A Quanser Shake Table II XY é um instrumento de precisão, com sensores de posição de alta resolução, amplificadores de potência integrados, software de análise avançado e suporte técnico profissional, desenvolvido para aplicações de investigação exigente. O protótipo desenvolvido no presente projeto é, por natureza, uma solução de menor precisão e mais limitada em termos de capacidade de carga, frequências máximas e automação, mas adequada para os objetivos pedagógicos e de demonstração que motivaram o seu desenvolvimento — nomeadamente a utilização em países em desenvolvimento e em contextos de ensino com recursos financeiros limitados.

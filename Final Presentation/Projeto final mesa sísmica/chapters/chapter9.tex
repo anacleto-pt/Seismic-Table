@@ -12,14 +12,54 @@ Este capítulo sintetiza as conclusões do projeto, as limitações identificada
 \section{Conclusões}
 \label{sec:conclusoes}
 
-% TODO: escrever conteúdo
+O presente projeto demonstrou a viabilidade do desenvolvimento de uma mesa sísmica bi-axial de baixo custo, recorrendo integralmente a componentes de eletrónica genérica e a estruturas fabricadas por impressão 3D. O sistema desenvolvido é capaz de reproduzir o perfil de deslocamento do registo sísmico de El Centro de 1940, em ambas as componentes horizontais (Norte-Sul e Este-Oeste), com uma frequência de atualização de 50\,Hz, utilizando quatro motores de passo NEMA17 controlados por um microcontrolador ESP32 com \textit{drivers} DRV8825.
+
+A abordagem adotada — baseada na pré-conversão dos dados sísmicos em arrays de passos de motor através de um script Python, e na execução destes arrays em tempo real pelo firmware do ESP32 com a biblioteca AccelStepper em modo de velocidade instantânea — provou ser tecnicamente adequada e conceptualmente correta. A separação entre a fase de pré-processamento (\textit{offline}, em Python) e a fase de execução (em tempo real, em C++ no ESP32) simplifica o firmware, garante a determinismo da execução e permite uma fácil substituição ou adaptação do registo sísmico utilizado sem necessidade de alterar a lógica de controlo.
+
+O objetivo de baixo custo foi amplamente cumprido: o custo total do protótipo situa-se muito abaixo do limiar de 500\,\euro{} estabelecido como requisito, representando uma fração ínfima do custo da única solução comercial bi-axial identificada (Quanser Shake Table II XY, estimativa superior a 10\,000\,\euro{}). A reprodutibilidade do projeto é garantida pela disponibilização pública de todos os ficheiros necessários — ficheiros CAD das peças impressas, firmware, scripts Python e documentação técnica —, permitindo que qualquer instituição replique o sistema de forma autónoma.
+
+% TODO: COMPLETAR --- Acrescenta aqui conclusões específicas dos teus resultados de validação experimental: erro de posicionamento medido, gama de velocidades alcançada sem perda de passo, comportamento mecânico observado (vibração residual, rigidez, folgas), qualidade visual da reprodução sísmica, etc.
+
+Em síntese, o projeto cumpriu os seus objetivos fundamentais: produzir uma ferramenta de ensino e investigação acessível, bi-axial, reprodutível e capaz de simular sismos reais, que pode ser utilizada em contextos com recursos limitados onde as soluções comerciais são economicamente inviáveis. O trabalho realizado representa uma contribuição original para a área do ensino da engenharia sísmica em países em desenvolvimento, estabelecendo uma base sólida para desenvolvimentos futuros.
+
 
 \section{Limitações Identificadas}
 \label{sec:limitacoes}
 
-% TODO: escrever conteúdo
+Não obstante os resultados positivos obtidos, o sistema apresenta um conjunto de limitações que importa reconhecer e documentar, de forma a enquadrar corretamente o âmbito de aplicação adequado do protótipo desenvolvido.
+
+\begin{itemize}
+    \item \textbf{Ausência de realimentação de posição:} O sistema opera em malha aberta, sem encoders ou outros sensores de posição. Em caso de perda de passo — que pode ocorrer em condições de carga elevada ou velocidade excessiva —, o sistema não tem capacidade de detetar nem de corrigir o desvio de posição resultante. Esta limitação implica que a fidelidade da reprodução sísmica depende criticamente de os motores nunca perderem passos durante a execução, o que impõe restrições à carga máxima admissível na plataforma.
+
+    \item \textbf{Resolução temporal limitada pelo \texttt{millis()}:} A função \texttt{millis()} do ESP32 tem uma resolução de 1\,ms, introduzindo um \textit{jitter} de temporização de até $\pm 1\,\text{ms}$ por janela (equivalente a $\pm 5\%$ do período de 20\,ms). Para aplicações de elevada precisão temporal, esta limitação poderia ser mitigada utilizando os temporizadores de \textit{hardware} do ESP32 com resolução de microsegundos.
+
+    \item \textbf{Estrutura em polímero termoplástico:} As peças impressas em PLA ou PETG apresentam limitações de rigidez e resistência térmica face a materiais alternativos como o alumínio. A deformação elástica das peças impressas sob carga pode introduzir flexibilidade não desejada na transmissão do movimento, afetando a precisão dos deslocamentos impostos à plataforma.
+
+    \item \textbf{Erro de quantização inteira:} A conversão dos deslocamentos sísmicos para passos de motor envolve uma truncagem para inteiro, introduzindo um erro de quantização de até $\pm 1$ passo por janela. A acumulação deste erro ao longo dos 2673 pontos do registo completo pode resultar num desvio de posição absoluta que, embora sem impacto significativo no perfil dinâmico reproduzido, limita a precisão de posicionamento absoluto do sistema.
+
+    \item \textbf{Modos de operação incompletos:} Os modos de frequência constante e de controlo manual, definidos como requisitos funcionais do sistema, % TODO: COMPLETAR --- indica aqui se foram implementados completamente, parcialmente ou se constituem trabalho futuro.
+
+    \item \textbf{Ausência de interface de utilizador:} A operação do sistema requer, na versão atual, conhecimentos de programação em C++ e Python para alterar os parâmetros de operação, selecionar o modo de funcionamento ou carregar um novo registo sísmico. Esta dependência limita a utilização autónoma do sistema por utilizadores sem formação técnica em programação, o que contraria parcialmente o objetivo de acessibilidade ampla.
+\end{itemize}
+
 
 \section{Propostas de Melhoria e Trabalho Futuro}
 \label{sec:trabalho-futuro}
 
-% TODO: escrever conteúdo
+Com base na experiência adquirida durante o desenvolvimento do projeto e nos resultados da validação experimental, identificaram-se as seguintes linhas de desenvolvimento prioritárias para trabalho futuro.
+
+\begin{itemize}
+    \item \textbf{Integração de encoders rotacionais:} A adição de encoders incrementais nos veios dos motores, ou de encoders lineares nas guias da plataforma, permitiria implementar controlo em malha fechada com deteção e correção de perda de passo em tempo real. Esta melhoria aumentaria significativamente a fiabilidade e precisão do sistema, em particular nas condições de carga e velocidade mais exigentes.
+
+    \item \textbf{Interface gráfica de utilizador via Wi-Fi:} O módulo Wi-Fi integrado no ESP32 permitiria desenvolver uma interface de controlo baseada em navegador web (servidor HTTP no próprio ESP32), eliminando a necessidade de ligação USB e tornando o sistema acessível a utilizadores sem competências de programação. Esta interface poderia incluir a seleção do modo de operação, a configuração de parâmetros de amplitude e frequência, e a visualização gráfica em tempo real dos perfis de velocidade.
+
+    \item \textbf{Suporte genérico a registos sísmicos em \textit{runtime}:} Na versão atual, os dados do sismo de El Centro estão compilados estaticamente no firmware. Uma evolução natural seria suportar a leitura de registos sísmicos genéricos em formato CSV ou AT2 a partir de um cartão microSD ou via transferência Wi-Fi em tempo de execução, eliminando a necessidade de recompilar e recarregar o firmware para utilizar um registo sísmico diferente.
+
+    \item \textbf{Implementação completa dos modos de frequência constante e manual:} O modo de excitação sinusoidal com amplitude e frequência configuráveis e o modo de controlo manual devem ser integralmente implementados e validados, completando o conjunto de funcionalidades definidas nos requisitos funcionais do sistema.
+
+    \item \textbf{Melhoria da rigidez mecânica:} A substituição das peças estruturais mais solicitadas — como os suportes dos fusos e as plataformas — por peças em alumínio maquinado ou por compósitos reforçados com fibra de carbono permitiria reduzir a flexibilidade parasita da estrutura e aumentar a capacidade de carga da plataforma, preservando a acessibilidade económica do projeto.
+
+    \item \textbf{Instrumentação da plataforma com acelerómetro:} A incorporação de um acelerómetro triaxial de precisão na plataforma superior permitiria medir diretamente a aceleração imposta à estrutura ensaiada, fornecendo uma validação quantitativa em tempo real da qualidade da reprodução sísmica e possibilitando a comparação direta com os dados de aceleração do registo original de El Centro.
+
+    \item \textbf{Redução das dimensões para maior portabilidade:} Para maximizar a portabilidade do sistema — uma das motivações centrais do projeto —, poderiam ser explorados designs mais compactos e de menor peso, com fusos de comprimento reduzido e motores de menor inércia, mantendo as funcionalidades essenciais numa pegada física significativamente menor, facilitando o transporte e montagem em contextos de recursos limitados.
+\end{itemize}
