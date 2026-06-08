@@ -48,7 +48,7 @@
 %%% |             |   | dgeo        |
 %%% ---------------   --------------
 %% Import the UA thesis template
-\usepackage[engineering,deti]{uaThesisTemplate}
+\usepackage[engineering,deti,final]{uaThesisTemplate}
 
 
 %% Optional packages for utf8 encoding and T1 fonts
@@ -80,8 +80,8 @@
 
 
 %%% Uncomment one of the following options:
-%\DocumentTypeThesis
-\DocumentTypeThesisProposal
+\DocumentTypeThesis
+%\DocumentTypeThesisProposal
 %\DocumentTypeDissertation
 
 %%% Uncomment if you are a student of a MAP Doctoral program 
@@ -96,23 +96,22 @@
 
 %%% Edit author's name
 %% Author's full name
-\Author{FIRST NAME\\LAST NAME}
+\Author{Vasco\\Anacleto}
 
 %%% Edit thesis title in Portuguese
 %% Thesis Mandatory Title in Portuguese
-\TitlePT{TÍTULO DA TESE (MÁXIMO 70 CARACTERES)}
+\TitlePT{Desenvolvimento de uma Mesa Sísmica com Recurso a Impressão 3D}
 
 %%% OPTIONAL: you can write your thesis title in
 %%%  other languages. You can repeat the following
 %%%  line as many times as you want, or remove it
 %%%  if you only want the portuguese title.
 %% Optional Titles in additional languages.
-\TitleEN{THESIS TITLE (MAX 70 CHARACTERS)}
+\TitleEN{Development of an Earthquake Shaking Table using 3D Printing}
 
 %%% OPTIONAL: add a quotation if you like.
 %% Optional Quotation
-\Quote{\selectlanguage{english}The greatest challenge to any thinker is stating
-the problem in a way that will allow a solution}{Bertrand Russell}
+\Quote{\selectlanguage{english}The secret of getting ahead is getting started.}{Mark Twain}
 
 %%% Edit your supervisor's information.
 %%%
@@ -131,7 +130,7 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% | auxiliar convidado     |
 %%% --------------------------
 %% Supervisor information
-\Supervisor{(nome do orientador)}{associado}
+\Supervisor{Vítor Silva}{auxiliar}
 
 %%% OPTIONAL: you can add a second supervisor.
 %%%
@@ -147,7 +146,7 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% school    : University/Scholl name; Choose the
 %%%             preposition accordingly.
 %% Optional SecondSuperviser information
-\SecondSupervisor{(co-orientador)}{auxiliar convidado}{do Departamento de Matemática}{da Universidade de Aveiro}
+\SecondSupervisor{Victor Neto}{auxiliar convidado}{do Departamento de Eletrónica, Telecomunicações e Informática}{da Universidade de Aveiro}
 
 %%% Edit your degree information.
 %%%
@@ -156,31 +155,23 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% title: Degree title (Mestre or Doutor)
 %%% name : Degree name
 %% Degree title and name
-\Degree{Mestre}{Engenharia de Computadores e Telemática}
-
-%%% OPTIONAL: edit grant support texts where
-%%%  appropriate. Maximum two.
-%%%
-%%% \GrantText{grant1}{grant2}
-%% Optional Grant support texts
-\GrantText{Texto Apoio financeiro do POCTI no âmbito do III Quadro Comunitário de Apoio.}
-          {Texto Apoio financeiro da FCT e do FSE no âmbito do III Quadro Comunitário de Apoio.}
+\Degree{Licenciado}{Engenharia Computacional}
 
 %%% OPTIONAL: Add a dedication text.
 %% Optional Dedication text
-\Dedication{Dedico este trabalho à minha esposa e filho pelo incansável apoio.}
+\Dedication{À minha família e amigos, pelo apoio incondicional ao longo deste percurso.}
 
 %%% OPTIONAL: Add an acknowledgement text
 %% Optional Acknowledgement text
-\Acknowledgements{Agradeço toda a ajuda a todos os meus colegas e companheiros.}
+\Acknowledgements{Agradeço ao Professor Vítor Silva pela orientação, disponibilidade e entusiasmo ao longo de todo o projeto. Ao Professor Victor Neto pelo apoio e co-orientação. À Universidade de Aveiro e ao DETI pelas condições proporcionadas. A todos os colegas e amigos que, de alguma forma, contribuíram para a realização deste trabalho.}
 
 %%% Edit the keywords and abstract in Portuguese
 %%% Don't forget to remove the \blindtext[3]
 %%%  declaration.
 %%% Don't remove the \selectlanguage statement or you will end with incorrect hyphenation
 %% Mandatory Keywords and Abstract in Portuguese
-\Abstract{Palavras Chave}{texto livro, arquitetura, história, construção, materiais de construção, saber tradicional.}
-         {Resumo}{\selectlanguage{portuguese}Um resumo é um pequeno apanhado de um trabalho mais longo (como uma tese, dissertação ou trabalho de pesquisa). O resumo relata de forma concisa os objetivos e resultados da sua pesquisa, para que os leitores saibam exatamente o que se aborda no seu documento.\\Embora a estrutura possa variar um pouco dependendo da sua área de estudo, o seu resumo deve descrever o propósito do seu trabalho, os métodos que você usou e as conclusões a que chegou.\\Uma maneira comum de estruturar um resumo é usar a estrutura IMRaD. Isso significa: \begin{itemize} \item Introdução \item Métodos \item Resultados \item Discussão \end{itemize} Veja mais pormenores aqui:\\\texttt{https://www.scribbr.com/dissertation/abstract/}}
+\Abstract{Palavras Chave}{mesa sísmica, impressão 3D, motores de passo, ESP32, baixo custo, simulação sísmica, El Centro.}
+         {Resumo}{\selectlanguage{portuguese}O presente documento descreve o desenvolvimento de uma mesa sísmica de baixo custo com recurso a técnicas de impressão 3D, no âmbito do Projeto Final de Licenciatura em Engenharia Computacional da Universidade de Aveiro. O trabalho foi motivado pela necessidade de disponibilizar equipamento de simulação sísmica acessível para fins educativos, em particular em países em desenvolvimento onde o acesso a soluções comerciais é inviável devido ao custo elevado. O sistema desenvolvido é constituído por uma plataforma bi-axial (X e Y) acionada por quatro motores de passo NEMA17, controlados por um microcontrolador ESP32 através de drivers DRV8825 e uma CNC Shield. A estrutura mecânica foi fabricada maioritariamente por impressão 3D (FDM), recorrendo a fusos trapezoidais como mecanismo de translação. O firmware, desenvolvido em C++ com a biblioteca AccelStepper, reproduz registos sísmicos reais a 50~Hz, com base no sismo de El Centro de 1940 (componentes NS e EW), previamente convertidos de deslocamento para passos de motor através de um pipeline em Python. O protótipo desenvolvido cumpre os requisitos funcionais definidos, permitindo a simulação de sismos reais e representando uma alternativa de custo significativamente inferior às soluções comerciais existentes.}
 
 %%% OPTIONAL: you can write the keywords and
 %%%  abstract in other languages. You can repeat
@@ -189,21 +180,12 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% Don't remove the \selectlanguage statement or you will end with incorrect hyphenation.
 %%% You can modify the language to any other supported by Latex
 %% Optional Keywords and Abstract in additional languages.
-\Abstract{Keywords}{textbook, architecture, history, construction, construction materials, traditional knowledge.}
-         {Abstract}{\selectlanguage{english}An abstract is a short summary of a longer work (such as a thesis, dissertation or research paper).\\The abstract concisely reports the aims and outcomes of your research, so that readers know exactly what your paper is about.\\Although the structure may vary slightly depending on your discipline, your abstract should describe the purpose of your work, the methods you’ve used, and the conclusions you’ve drawn.\\One common way to structure your abstract is to use the IMRaD structure. This stands for: \begin{itemize} \item Introduction \item Methods \item Results \item Discussion \end{itemize} Check for more details here:\\\texttt{https://www.scribbr.com/dissertation/abstract/}}
+\Abstract{Keywords}{shaking table, 3D printing, stepper motors, ESP32, low-cost, seismic simulation, El Centro.}
+         {Abstract}{\selectlanguage{english}This document describes the development of a low-cost seismic shaking table using 3D printing techniques, as part of the Final Project for the Bachelor’s degree in Computational Engineering at the University of Aveiro. The work was motivated by the need to provide accessible seismic simulation equipment for educational purposes, particularly in developing countries where commercial solutions are cost-prohibitive. The developed system consists of a two-axis (X and Y) platform driven by four NEMA17 stepper motors, controlled by an ESP32 microcontroller through DRV8825 drivers and a CNC Shield. The mechanical structure was manufactured primarily using FDM 3D printing, using trapezoidal lead screws as the translation mechanism. The firmware, developed in C++ using the AccelStepper library, reproduces real seismic records at 50~Hz based on the 1940 El Centro earthquake (NS and EW components), previously converted from displacement to motor steps via a Python pipeline. The developed prototype meets the defined functional requirements, enabling real earthquake simulation at a cost significantly lower than existing commercial solutions.}
 
 %%% Edit the Jury President information.
 %% First Member will be the President of the Jury
-\JuriMember{Prof. Doutor João Antunes da Silva}{professor associado da Faculdade de Engenharia da Universidade do Porto}
-
-%%% Repeat the above declaration for additional
-%%%  members of the jury as many times as necessary.
-%% Additional members of the Jury
-\JuriMember{Prof. Doutor João Antunes da Silva}{professor associado da Faculdade de Engenharia da Universidade do Porto}
-\JuriMember{Prof. Doutor João Antunes da Silva}{professor associado da Faculdade de Engenharia da Universidade do Porto}
-\JuriMember{Prof. Doutor João Antunes da Silva}{professor associado da Faculdade de Engenharia da Universidade do Porto}
-\JuriMember{Prof. Doutor João Antunes da Silva}{professor associado da Faculdade de Engenharia da Universidade do Porto}
-\JuriMember{Prof. Doutor João Antunes da Silva}{professor associado da Faculdade de Engenharia da Universidade do Porto}
+\JuriMember{Prof. Doutor Vítor Silva}{professor auxiliar do Departamento de Eletrónica, Telecomunicações e Informática da Universidade de Aveiro}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
