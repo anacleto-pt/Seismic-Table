@@ -1,71 +1,65 @@
 
-
 \chapter{Estado da Arte}
-\label{chapter:state-of-the-art}
+\label{chapter:stateofart}
 
 \begin{introduction}
-Este capítulo percorre o estado da arte em mesas sísmicas, abordando soluções comerciais disponíveis, iniciativas académicas de baixo custo descritas na literatura e as lacunas que motivaram o desenvolvimento do presente trabalho.
+Este capítulo apresenta o enquadramento teórico e tecnológico do projeto. São analisadas as soluções comerciais existentes, os projetos académicos de referência na área de mesas sísmicas de baixo custo e identificadas as lacunas que o presente trabalho procura colmatar.
 \end{introduction}
 
-
-
 \section{Mesas Sísmicas --- Conceito e Aplicações}
-\label{sec:mesas-sismicas}
+\label{sec:conceito}
 
-Uma mesa sísmica, também designada por \textit{shake table} na literatura anglófona, é um equipamento laboratorial concebido para reproduzir, de forma controlada, os movimentos de um sismo. O princípio de funcionamento assenta na imposição de deslocamentos ou acelerações a uma plataforma móvel, sobre a qual se coloca um modelo estrutural em escala reduzida ou um protótipo a escala real. Desta configuração resulta a possibilidade de observar e quantificar a resposta dinâmica de estruturas face a excitações sísmicas, sendo por isso um instrumento central da engenharia sísmica experimental.
+Uma mesa sísmica é um equipamento capaz de reproduzir movimentos do solo semelhantes aos provocados por sismos, permitindo estudar a resposta dinâmica de estruturas e materiais em condições controladas. O princípio de funcionamento consiste em imprimir à plataforma de ensaio um perfil de deslocamento, velocidade ou aceleração correspondente a um registo sísmico real ou sintético.
 
-Do ponto de vista tipológico, as mesas sísmicas classificam-se pelo número de graus de liberdade que suportam. Os sistemas uni-axiais, predominantes em laboratórios académicos de pequena escala, impõem movimento numa única direção horizontal. Os sistemas bi-axiais, como o desenvolvido neste projeto, permitem movimentos simultâneos em duas direções horizontais ortogonais, o que lhes confere maior fidelidade na reprodução de registos sísmicos reais, cujas componentes raramente se confinam a uma única direção. No extremo oposto, os sistemas de seis graus de liberdade (6-DOF), presentes em grandes centros de investigação, reproduzem as três componentes de translação e as três de rotação do movimento do solo, embora a sua complexidade construtiva e custo os tornem inacessíveis fora desse contexto.
+As aplicações destas plataformas são vastas: desde a validação experimental de modelos numéricos de estruturas civis, ao ensaio de componentes e equipamentos sujeitos a cargas sísmicas, passando pela investigação de fenómenos como a interação solo-estrutura e o comportamento de sistemas de isolamento sísmico. A possibilidade de reproduzir registos históricos, como o sismo de El~Centro (1940) ou o de Northridge (1994), disponíveis em bases de dados públicas como a PEER Ground Motion Database~\cite{PEERDatabase}, confere a estes sistemas um papel insubstituível na engenharia sísmica experimental.
 
-Em países onde o risco sísmico é elevado mas o acesso a equipamento especializado é escasso, as mesas sísmicas de baixo custo têm uma utilidade prática e imediata no trabalho de investigação e avaliação de risco sísmico no terreno. A possibilidade de construir e replicar este tipo de equipamento com recursos mínimos é uma necessidade real em contextos onde os sistemas comerciais são simplesmente inviáveis. O uso em ambiente académico e formativo surge como uma vantagem adicional, não como a razão de ser do projeto.
-
+Do ponto de vista da configuração mecânica, as mesas sísmicas classificam-se principalmente em uni-axiais, bi-axiais e sistemas de seis graus de liberdade (6-DOF)~\cite{Damci2018}. Os sistemas uni-axiais simulam apenas uma componente horizontal do movimento, ao passo que os sistemas bi-axiais permitem reproduzir simultaneamente as componentes Norte-Sul e Este-Oeste de um registo sísmico, aproximando-se de forma mais fiel à realidade física de um evento sísmico~\cite{2DOF2025}.
 
 \section{Soluções Comerciais Existentes}
-\label{sec:solucoes-comerciais}
+\label{sec:comerciais}
 
-O mercado de mesas sísmicas para fins académicos e laboratoriais concentra-se num número reduzido de fabricantes especializados. Na generalidade, os seus produtos têm custos que os tornam inacessíveis para a maior parte das instituições de investigação e organismos técnicos em países em desenvolvimento.
+No mercado académico e de investigação, a Quanser Inc. é o fabricante de referência para mesas sísmicas de bancada. A \textbf{Quanser Shake Table II XY}~\cite{QuanserShakeTableIIXY} é a solução bi-axial de entrada de gama desta empresa, constituída por dois módulos uni-axiais montados perpendicularmente. Cada eixo tem uma gama de deslocamento de $\pm7{,}6$~cm e o sistema é capaz de atingir uma aceleração de 2,5~g com uma carga de 7,5~kg. O acionamento é feito por motores \textit{brushless} de corrente contínua de alta potência, com encoders de alta resolução (resolução linear de 1,55~\textmu m) e a plataforma suporta perfis de sismos reais pré-carregados (Northridge, Kobe, El~Centro) bem como registos personalizados obtidos da base de dados PEER. O controlo é efetuado via MATLAB\textsuperscript{\textregistered}/Simulink\textsuperscript{\textregistered} com o software QUARC\textsuperscript{\textregistered} da Quanser, tornando-a uma solução de arquitetura aberta mas totalmente integrada num ecossistema proprietário. O preço desta plataforma não é publicamente divulgado e requer pedido de orçamento, sendo estimado em valores muito acima dos 10\,000~€, o que a torna inacessível para a maioria das instituições de ensino em países em desenvolvimento.
 
-A solução comercial mais diretamente comparável ao presente projeto é a \textit{Quanser Shake Table II XY}, fabricada pela empresa canadiana Quanser. Trata-se de uma plataforma bi-axial concebida para fins académicos e de investigação, com software dedicado para controlo preciso dos movimentos e aquisição de dados em tempo real. O sistema inclui amplificadores de potência integrados, sensores de posição de alta resolução e compatibilidade com ambientes de simulação como MATLAB/Simulink. Contudo, o preço estimado ultrapassa os dez mil euros, o que a torna economicamente inviável para projetos de investigação em países em desenvolvimento e para qualquer contexto com financiamento limitado. Acresce que a Quanser não divulga preços publicamente, exigindo consulta formal de orçamento ao fabricante, o que restringe ainda mais o acesso por parte de utilizadores com recursos escassos.
+Para necessidades de maior capacidade de carga, a \textbf{Quanser Shake Table III XY}~\cite{QuanserShakeTableIII} oferece uma plataforma bi-axial acionada por motores lineares, capaz de movimentar cargas até 100~kg com uma aceleração máxima de 1~g em cada eixo e uma gama de deslocamento de $\pm10{,}8$~cm. Esta solução destina-se a investigação avançada e o seu custo situa-se numa faixa ainda mais elevada, restringindo o seu uso a laboratórios especializados de grandes universidades ou institutos de investigação.
 
-Outras soluções no mercado pertencem a fabricantes industriais como a MTS Systems Corporation e a Servotest Testing Systems. Estes sistemas destinam-se a ensaios de certificação em engenharia civil e mecânica, com capacidades de carga na ordem das toneladas e atuação hidráulica de elevada potência. Os preços situam-se frequentemente na ordem das centenas de milhares de euros.
-
-Existe, portanto, uma lacuna clara no mercado: nenhuma solução comercial oferece uma plataforma bi-axial de baixo custo adequada ao trabalho de investigação sísmica em contextos com recursos limitados.
-
+A barreira económica imposta por estas soluções comerciais constitui o principal obstáculo à democratização do ensaio sísmico experimental, em particular nos contextos de trabalho de campo em países menos desenvolvidos ou em instituições com recursos limitados.
 
 \section{Projetos Académicos e Low-Cost}
-\label{sec:projetos-academicos}
+\label{sec:academicos}
 
-A literatura científica e técnica documenta diversas iniciativas académicas de desenvolvimento de mesas sísmicas de baixo custo, em grande medida impulsionadas pelo custo proibitivo das alternativas comerciais. Do ponto de vista técnico, a maioria destes projetos recorre a microcontroladores da família Arduino, a motores de passo NEMA17 ou NEMA23, e a mecanismos de translação por correia dentada ou fuso de esferas, escolhas que refletem a disponibilidade e o baixo custo destes componentes no mercado.
+A dificuldade de acesso a equipamento comercial motivou, nas últimas décadas, o desenvolvimento de diversas alternativas académicas de baixo custo. A revisão de literatura identificou três trabalhos de particular relevância para o presente projeto.
 
-No que respeita ao número de eixos, a quase totalidade dos projetos académicos de baixo custo identificados na literatura implementa apenas um eixo de movimento. Esta limitação decorre, em grande parte, da complexidade que o segundo eixo introduz: sincronização dos motores, ajustes ao design mecânico e processamento de dados sísmicos bidimensionais. Os sistemas uni-axiais são suficientes para demonstrar fenómenos como a ressonância e o comportamento de estruturas de um grau de liberdade, mas não conseguem reproduzir fielmente registos sísmicos reais, cujas componentes raramente se restringem a uma única direção.
+O trabalho de Damcı e Şekerci~\cite{Damci2018} constitui uma das referências mais citadas neste domínio. Os autores desenvolveram a mesa sísmica \textbf{SARSAR}, uma plataforma uni-axial de baixo custo baseada em microcontroladores Arduino. O sistema utiliza um fuso de esferas acionado por um motor de passo para transferir registos de aceleração de sismos reais ao longo de um único eixo horizontal. Para verificação, a resposta da mesa é medida por uma unidade de aquisição de dados independente baseada num Arduino MEGA. A plataforma consegue deslocamentos até $\pm75$~mm, velocidades até 350~mm/s e frequências até 17~Hz, sendo apresentada como uma alternativa viável e de baixo custo para análise estrutural experimental.
 
-No plano da estrutura mecânica, a maioria dos projetos académicos recorre a perfis de alumínio extrudido, madeira contraplacada ou chapas metálicas, sem utilizar impressão 3D nos componentes estruturais. Esta opção é menos frequente, mas tem vantagens práticas: reduz o custo, permite ajustar a geometria sem recorrer a maquinagem especializada e facilita a reprodução por terceiros, dado que os ficheiros de modelação podem ser distribuídos e reproduzidos com qualquer impressora FDM de gama de entrada.
+Mais recentemente, Chen et al.~\cite{Shakebot2022} apresentaram o \textbf{Shakebot}, uma mesa sísmica uni-axial \textit{open-source} com um custo inferior a 2\,000~USD, construída com base no sistema operativo robótico ROS (\textit{Robot Operating System}). Uma característica distintiva deste projeto é a reutilização de componentes de impressoras 3D de alta precisão, nomeadamente um motor de passo em malha fechada para o acionamento e uma correia dentada para a transmissão. O sistema atinge uma aceleração máxima de 11,8~m/s² (1,2~g) e uma velocidade de 0,5~m/s com uma carga de 2~kg, dispondo ainda de acelerómetro e câmara de alta cadência para estimação do movimento da plataforma.
 
-% TODO: COMPLETAR --- Se tiveres referências bibliográficas específicas (artigos, dissertações, repositórios GitHub) sobre projetos académicos de mesas sísmicas low-cost, adiciona-as aqui com \cite{} e comenta brevemente as características de cada um (eixos, custo, plataforma de controlo, mecanismo de translação).
-
-Na revisão efetuada, não foi identificado nenhum projeto que reúna simultaneamente as três características centrais do presente trabalho: dois eixos de movimento, estrutura integralmente produzida por impressão 3D e capacidade de reproduzir registos sísmicos reais a partir de dados históricos de acesso livre. É esta combinação que distingue o projeto desenvolvido das restantes abordagens documentadas na literatura.
-
+Num trabalho mais recente e de maior ambição, foi apresentado por Vargas et al.~\cite{2DOF2025} o desenvolvimento de uma mesa de \textbf{2-DOF de arquitetura aberta}, capaz de reproduzir registos sísmicos reais em dois eixos horizontais ortogonais. A plataforma é construída com módulos CNC standard e motores NEMA23 sem escovas (\textit{BLDC}), com uma estrutura base em aço estrutural de alta inércia para minimizar vibrações parasitas. Uma contribuição central deste trabalho é a caracterização das dinâmicas não lineares de atrito do sistema --- nomeadamente os efeitos de amortecimento viscoso e de Coulomb --- recorrendo ao algoritmo de Mínimos Quadrados Recursivos (RLS) com filtros de variável de estado (SVF) para identificação de parâmetros. Esta modelação é crítica para a reprodução fiel de cruzamentos de velocidade zero nos sinais sísmicos.
 
 \section{Análise Comparativa e Lacunas Identificadas}
-\label{sec:analise-comparativa}
+\label{sec:comparativo}
 
-A comparação entre as soluções existentes, tanto comerciais como académicas, permite identificar as lacunas que o presente projeto procura colmatar. A Tabela~\ref{tab:comparacao-solucoes} resume os principais parâmetros de cada abordagem.
+A Tabela~\ref{tab:comparativo} sintetiza as principais características dos sistemas analisados, confrontando-os com o projeto desenvolvido no presente trabalho.
 
 \begin{table}[h]
 \centering
 \caption{Comparação entre soluções de mesas sísmicas existentes e o presente projeto.}
-\label{tab:comparacao-solucoes}
+\label{tab:comparativo}
 \begin{tabular}{lcccc}
 \hline
-\textbf{Solução} & \textbf{Eixos} & \textbf{Custo estimado} & \textbf{Impressão 3D} & \textbf{Sismos reais} \\
+\textbf{Solução} & \textbf{Eixos} & \textbf{Custo} & \textbf{Imp. 3D} & \textbf{Sismos Reais} \\
 \hline
-Quanser Shake Table II XY & 2 & $>$10\,000\,\euro{} & Não & Sim \\
-MTS / Servotest (industrial) & Até 6 & $>$100\,000\,\euro{} & Não & Sim \\
-Mesa académica típica & 1 & $\sim$100--300\,\euro{} & Não & Não \\
-Este projeto & 2 & $<$500\,\euro{} & Sim & Sim \\
+Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} & 2 & $>$10\,000~€ & Não & Sim \\
+Quanser Shake Table III XY~\cite{QuanserShakeTableIII} & 2 & $>>$10\,000~€ & Não & Sim \\
+SARSAR~\cite{Damci2018}                                & 1 & $\sim$200~€  & Não & Sim \\
+Shakebot~\cite{Shakebot2022}                          & 1 & $<$2\,000~USD & Parcial & Sim \\
+Mesa 2-DOF~\cite{2DOF2025}                            & 2 & N/D           & Não & Sim \\
+\textbf{Este projeto}                                 & \textbf{2} & \textbf{$<$500~€} & \textbf{Sim} & \textbf{Sim} \\
 \hline
 \end{tabular}
 \end{table}
 
-A tabela permite identificar dois padrões distintos. As soluções bi-axiais têm custos proibitivos, incompatíveis com o contexto de aplicação visado. As soluções acessíveis são, sem exceção, uni-axiais e não reproduzem registos sísmicos reais, o que limita a sua utilidade para o trabalho de investigação e avaliação de risco sísmico. O presente projeto procura colmatar esta lacuna: combina a capacidade bi-axial com um custo inferior a quinhentos euros, uma estrutura reprodutível por impressão 3D e a reprodução do registo sísmico de El Centro de 1940.
+Da análise comparativa ressaltam duas conclusões principais. Em primeiro lugar, as soluções comerciais bi-axiais disponíveis --- nomeadamente as da Quanser --- apresentam um custo proibitivo para utilização em contextos de recursos limitados, além de dependerem de ecossistemas de software proprietários. Em segundo lugar, os projetos académicos de baixo custo existentes são, na sua maioria, uni-axiais e não recorrem à impressão 3D como tecnologia de fabrico da estrutura mecânica.
 
-Em síntese, não existe atualmente uma solução bi-axial, de baixo custo, \textit{open-source} e fabricável por impressão 3D, com capacidade de reproduzir registos sísmicos históricos reais com resolução temporal de 20\,ms. O presente projeto propõe-se preencher esta lacuna, com um enfoque particular nos contextos de investigação sísmica em países onde o acesso a equipamento especializado é economicamente inviável.
+O único projeto bi-axial de arquitetura aberta identificado na literatura~\cite{2DOF2025} utiliza materiais e componentes industriais que aumentam significativamente o custo e a complexidade de fabrico, não sendo adequado para utilização portátil em trabalho de campo.
+
+Identificou-se assim uma lacuna clara: não existe, na literatura acessível, uma solução que combine simultaneamente dois eixos de atuação, estrutura fabricada por impressão 3D, custo inferior a 500~€, reprodução de sismos reais e arquitetura totalmente aberta e reproduzível. É precisamente nesta interseção que o presente projeto se posiciona.
