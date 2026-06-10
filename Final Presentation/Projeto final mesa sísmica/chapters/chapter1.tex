@@ -12,24 +12,19 @@ Este capítulo apresenta a motivação e o contexto do projeto, os objetivos def
 \section{Motivação e Contexto}
 \label{sec:motivacao}
 
-Portugal encontra-se numa zona de elevada atividade sísmica, na confluência das placas Euro-Asiática e Africana, e tem sofrido sismos de grande magnitude ao longo dos séculos. O sismo de 1755 devastou Lisboa e gerou um tsunami que afetou boa parte da costa atlântica. Esta realidade não é exclusiva de Portugal: muitos outros países, sobretudo os de menores recursos económicos, enfrentam riscos sísmicos semelhantes sem dispor de meios adequados para preparar engenheiros capazes de lidar com eles. Perceber como as estruturas respondem a excitações sísmicas é, por isso, relevante tanto para a investigação como para o ensino da engenharia.
+Portugal encontra-se numa zona de elevada atividade sísmica, na confluência das placas Euro-Asiática e Africana o que causou o sismo de 1755 que devastou Lisboa. Esta realidade não é exclusiva de Portugal: muitos outros países enfrentam riscos sísmicos semelhantes sem dispor de meios adequados para preparar engenheiros capazes de lidar com eles.
 
-Foi precisamente essa lacuna que motivou este projeto. O professor Vítor Silva, no âmbito das suas atividades de investigação e cooperação técnica em países com recursos limitados, deparou-se com a falta de equipamento acessível para demonstrar, em sala de aula ou laboratório, o comportamento de estruturas sujeitas a excitações sísmicas. As mesas sísmicas disponíveis no mercado, como a \textit{Quanser Shake Table II XY}, custam mais de dez mil euros, o que as coloca fora do alcance da maioria das instituições de ensino nesses países. A maioria opera também num único eixo, sem suporte para a simulação de registos sísmicos bidimensionais com as componentes horizontal e transversal do movimento.
-
-A impressão 3D permite fabricar componentes mecânicos com geometrias complexas a um custo muito inferior ao dos processos tradicionais de maquinagem. Essa capacidade é o que torna este projeto praticável: uma mesa sísmica construída principalmente a partir de peças impressas em 3D e eletrónica de uso geral. Todos os ficheiros de projeto, incluindo peças mecânicas, firmware e scripts de processamento de dados, são disponibilizados publicamente para que qualquer instituição os possa replicar sem depender de recursos industriais ou comerciais.
-
+Foi precisamente esse problema que motivou este projeto. O professor Vítor Silva, no âmbito das suas atividades de investigação e cooperação técnica o estrangeiro, deparou-se com a ausência de equipamento acessível para realizar ensaios sísmicos portáteis de apoio ao trabalho de avaliação de risco estrutural no terreno. As mesas sísmicas disponíveis no mercado, como a \textit{Quanser Shake Table II XY}, custam mais de dez mil euros, o que as torna economicamente inviáveis em contextos de investigação com recursos limitados.
 
 \section{Objetivos do Projeto}
 \label{sec:objetivos}
 
-O objetivo principal deste projeto é desenvolver uma mesa sísmica de dois eixos, horizontal~(X) e transversal~(Y), de baixo custo, recorrendo predominantemente a peças fabricadas por impressão 3D e a componentes eletrónicos de uso geral. O sistema deve ser funcional, reprodutível e suficientemente barato para uso em contextos de ensino e investigação com recursos limitados. Os objetivos específicos são:
+O objetivo principal deste projeto é desenvolver uma mesa sísmica de dois eixos, horizontal~(X) e transversal~(Y), de baixo custo, recorrendo predominantemente a peças fabricadas por impressão 3D e a componentes eletrónicos de uso geral. O sistema deve ser funcional, reprodutível e suficientemente barato para uso em contextos de investigação e avaliação de risco sísmico com recursos limitados. Os objetivos específicos são:
 
 \begin{itemize}
     \item Projetar e fabricar, por impressão 3D, os componentes mecânicos estruturais da mesa sísmica, assegurando a rigidez necessária para o movimento bidirecional controlado;
     \item Implementar um sistema de atuação baseado em quatro motores de passo NEMA17, controlados por \textit{drivers} DRV8825, com transmissão de movimento por fuso trapezoidal de \textit{lead} de 8\,mm por volta;
     \item Desenvolver o firmware para o microcontrolador ESP32, utilizando a biblioteca AccelStepper, com suporte a uma janela de execução de 20\,ms por ponto de dados sísmicos;
-    \item Implementar um \textit{pipeline} de processamento de dados sísmicos em Python, capaz de converter registos históricos de deslocamento em sequências de passos de motor, usando como referência o registo de El Centro (1940) nas componentes Norte-Sul e Este-Oeste;
-    \item Suportar três modos de operação distintos: reprodução de sismo real a partir de dados históricos, excitação a frequência constante e controlo manual do movimento da plataforma;
     \item Garantir a reprodutibilidade do sistema, disponibilizando publicamente todos os ficheiros necessários à construção de uma unidade idêntica, mantendo o custo total significativamente abaixo das soluções comerciais equivalentes.
 \end{itemize}
 
@@ -39,8 +34,8 @@ O objetivo principal deste projeto é desenvolver uma mesa sísmica de dois eixo
 
 O documento está organizado em nove capítulos, acompanhando o desenvolvimento do projeto desde a fundamentação teórica até à validação experimental.
 
-O Capítulo~2 revê as soluções existentes de mesas sísmicas, tanto comerciais como académicas, com as respetivas características, limitações e custos, situando as lacunas que este projeto procura colmatar. O Capítulo~3 define os requisitos funcionais e não funcionais do sistema e as restrições de \textit{design} adotadas.
+O \textbf{Capítulo~2} revê as soluções existentes de mesas sísmicas, tanto comerciais como académicas, com as respetivas características, limitações e custos. O \textbf{Capítulo~3} define os requisitos funcionais e não funcionais do sistema e as restrições de \textit{design} adotadas.
 
-O Capítulo~4 descreve a arquitetura geral do sistema e a interação entre os subsistemas mecânico, elétrico e de software. O Capítulo~5 apresenta o \textit{hardware} desenvolvido: a estrutura mecânica impressa em 3D, o sistema de atuação com motores NEMA17 e o circuito de controlo baseado no ESP32. O Capítulo~6 cobre o software e o firmware, incluindo o \textit{pipeline} de processamento de dados sísmicos em Python e a lógica de controlo desenvolvida para o ESP32.
+O \textbf{Capítulo~4} descreve a arquitetura geral do sistema e a interação entre os subsistemas mecânico, elétrico e de software. O \textbf{Capítulo~5} apresenta o \textit{hardware} desenvolvido: a estrutura mecânica impressa em 3D, o sistema de atuação com motores NEMA17 e o circuito de controlo baseado no ESP32. O \textbf{Capítulo~6} cobre o software e o firmware, incluindo o \textit{pipeline} de processamento de dados sísmicos em Python e a lógica de controlo desenvolvida para o ESP32.
 
-O Capítulo~7 apresenta a metodologia de testes e os resultados da validação experimental, com a análise dos erros e limitações identificadas. O Capítulo~8 expõe a análise de custos e compara o projeto com soluções comerciais equivalentes. O Capítulo~9 apresenta as conclusões, sintetiza as limitações do trabalho e propõe direções para trabalho futuro.
+O \textbf{Capítulo~8} apresenta a metodologia de testes e os resultados da validação experimental, com a análise dos erros e limitações identificadas. O Capítulo~8 expõe a análise de custos e compara o projeto com soluções comerciais equivalentes. O \textbf{Capítulo~9} apresenta as conclusões, sintetiza as limitações do trabalho e propõe direções para trabalho futuro.
