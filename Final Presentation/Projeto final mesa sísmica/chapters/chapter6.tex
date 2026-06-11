@@ -22,7 +22,7 @@ O registo sísmico de El Centro de 1940, formalmente designado por \textit{Imper
 
 O registo é composto por duas componentes horizontais ortogonais: Norte-Sul (NS) e Este-Oeste (EW), cada uma disponível em séries temporais de aceleração, velocidade e deslocamento do solo, com um intervalo de amostragem de 20\,ms. Para o presente projeto, foram utilizados os dados de deslocamento (em metros), por serem a grandeza diretamente relevante para o controlo de posição da plataforma. O ficheiro NS apresenta 2687 amostras e o ficheiro EW apresenta 2673 amostras, correspondendo a aproximadamente 53 segundos de registo sísmico.
 
-% TODO: COMPLETAR --- Indica a fonte exata de onde obtiveste os dados de El Centro (ex: base de dados PEER NGA-West2 em https://ngawest2.berkeley.edu/, CESMD em https://www.strongmotioncenter.org/, ou outra fonte). Indica o nome dos ficheiros descarregados e o formato original (AT2, CSV, etc.), bem como o processamento eventualmente aplicado para obter os dados de deslocamento a partir das acelerações (integração dupla, \textit{baseline correction}, etc.), se aplicável.
+Os dados sísmicos utilizados foram fornecidos pelo orientador do projeto, Professor Vítor Silva, sob a forma de um ficheiro Microsoft Excel (\texttt{.xlsx}), denominado \texttt{ElCentro.xlsx}. O ficheiro continha duas folhas de cálculo, uma para cada componente horizontal do registo: Norte-Sul (NS) e Este-Oeste (EW). Cada folha apresentava três colunas: tempo (em segundos), aceleração (em m/s\textsuperscript{2}) e deslocamento (em metros), com um intervalo de amostragem de 20\,ms. Os dados de deslocamento foram utilizados diretamente pelo script Python, sem necessidade de integração numérica adicional, uma vez que o ficheiro já continha os valores de deslocamento processados. O registo corresponde ao sismo de El~Centro de 18 de maio de 1940 (Imperial Valley), captado na estação Imperial Valley Array \#9, e é amplamente utilizado como referência na engenharia sísmica experimental~\cite{Damci2018, 2DOF2025}.
 
 
 \subsection{Conversão de Deslocamento para Passos de Motor (Python)}
@@ -102,10 +102,10 @@ A Tabela~\ref{tab:parametros-conversao} resume os parâmetros fixos e configurá
 \hline
 Lead do fuso & 8\,mm/rev & Deslocamento linear por revolução completa \\
 Ângulo de passo (NEMA17) & 1,8° & Passo nominal do motor em \textit{full-step} \\
-Passos por revolução (\textit{full-step}) & 200 & $= 360° / 1{,}8°$ \\
-Microstepping configurado & \textit{(a completar)} & Jumpers M0/M1/M2 na CNC Shield \\
-Resolução linear por passo & \textit{(a completar)} & $= 8\,\text{mm} / (200 \times M_{\text{micro}})$ \\
-Fator de ajuste ($f_{\text{ajuste}}$) & \textit{(a completar)} & Fator de escala da amplitude \\
+Passos por revolução (\textit{full-step}) & 200 & $= 360º / 1{,}8°$ \\
+Microstepping configurado & $1/2$ & Jumpers M0 na CNC Shield \\
+Resolução linear por passo & $0{,}02$ & $= 8\,\text{mm} / (200 \times 2\ ({\text{Microstepping}}))$ \\ 
+Fator de ajuste ($f_{\text{ajuste}}$) & $1$ & Fator de escala da amplitude \\
 Intervalo temporal & 20\,ms & Duração de cada janela de dados \\
 Frequência de atualização & 50\,Hz & $= 1 / 0{,}02\,\text{s}$ \\
 Amostras NS (El Centro) & 2687 & Duração $\approx$ 53,7\,s \\
@@ -118,7 +118,7 @@ Amostras EW (El Centro) & 2673 & Duração $\approx$ 53,5\,s \\
 \section{Firmware do ESP32}
 \label{sec:firmware-esp32}
 
-O firmware do ESP32 é o componente responsável pela execução em tempo real da sequência de passos pré-calculada, pelo controlo síncrono dos quatro motores, pela emissão de telemetria série e pela gestão dos modos de operação do sistema. É desenvolvido em C++ utilizando o Arduino IDE com suporte para ESP32, aproveitando o vasto ecossistema de bibliotecas disponível, em particular a biblioteca AccelStepper.
+O firmware do ESP32 é o componente responsável pela execução em tempo real da sequência de passos pré-calculada, pelo controlo síncrono dos quatro motores. É desenvolvido em C++ utilizando o Arduino IDE com suporte para ESP32, aproveitando o vasto ecossistema de bibliotecas disponível, em particular a biblioteca AccelStepper.
 
 
 \subsection{Biblioteca AccelStepper --- Modo Velocidade Instantânea}
@@ -239,15 +239,11 @@ O sistema emite, a cada janela de 20\,ms, uma linha de dados via porta série (U
 Este formato é diretamente compatível com o Serial Plotter integrado no Arduino IDE, permitindo a visualização gráfica em tempo real dos perfis de velocidade dos quatro motores durante a reprodução do sismo. Os dados podem igualmente ser capturados por um terminal série (ex: PuTTY, CoolTerm) e exportados para ficheiros CSV, para análise posterior em Python ou Excel, possibilitando a comparação entre o perfil de velocidade efetivamente executado e o perfil teórico calculado a partir dos dados originais de El Centro.
 
 
-\subsection{Modos de Operação}
-\label{subsec:modos-operacao}
+\subsection{Operação}
+\label{subsec:operacao}
 
-O sistema suporta três modos de operação distintos, que permitem a sua utilização em diferentes contextos de investigação e demonstração experimental.
+O sistema opera sobre o seguinte modo:
 
 \begin{itemize}
-    \item \textbf{Modo Sismo Real:} O sistema percorre sequencialmente os arrays \texttt{sismo\_N}, \texttt{sismo\_E}, \texttt{sismo\_S} e \texttt{sismo\_W}, reproduzindo o perfil de deslocamento do registo sísmico de El Centro de 1940. O número de amostras percorridas é limitado pelo menor dos dois arrays (2673 pontos EW), garantindo a sincronização entre os dois eixos ao longo de toda a sequência. Este é o modo principal do sistema e o único completamente validado na versão atual.
-
-    \item \textbf{Modo Frequência Constante:} % TODO: COMPLETAR --- Descreve como implementaste este modo, se já estiver implementado. Uma abordagem típica é a geração de uma função sinusoidal de amplitude $A$ (em mm) e frequência $f$ (em Hz) configuráveis, calculando a velocidade do motor a cada janela de 20\,ms como a derivada discreta do deslocamento sinusoidal: $\Delta d_i = A \sin(2\pi f \cdot i \cdot T) - A \sin(2\pi f \cdot (i-1) \cdot T)$, onde $T = 0{,}02\,\text{s}$, convertendo depois para passos por segundo. Se ainda não estiver completamente implementado, indica-o explicitamente e inclui-o nas propostas de trabalho futuro (Secção~\ref{sec:trabalho-futuro}).
-
-    \item \textbf{Modo Manual:} % TODO: COMPLETAR --- Descreve como implementaste o modo de controlo manual, se já estiver implementado. Uma abordagem possível é o envio de comandos de movimento via porta série (ex: \texttt{'x+'}, \texttt{'x-'}, \texttt{'y+'}, \texttt{'y-'} para mover em cada direção, com velocidade e duração configuráveis por parâmetros adicionais). Outra abordagem é a utilização de um joystick analógico ou botões ligados diretamente ao ESP32. Se ainda não implementado, indica-o e inclui nas propostas de trabalho futuro.
+    \item \textbf{Simulação Sismo Real:} O sistema percorre sequencialmente os arrays \texttt{sismo\_N}, \texttt{sismo\_E}, \texttt{sismo\_S} e \texttt{sismo\_W}, reproduzindo o perfil de deslocamento do registo sísmico de El Centro de 1940. O número de amostras percorridas é limitado pelo menor dos dois arrays (2673 pontos EW), garantindo a sincronização entre os dois eixos ao longo de toda a sequência. Este é o modo principal do sistema e o único completamente validado na versão atual.
 \end{itemize}

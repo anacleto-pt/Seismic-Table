@@ -4,70 +4,90 @@
 \label{chapter:costs}
 
 \begin{introduction}
-Este capítulo apresenta a lista de materiais com os respetivos preços e compara o custo total do protótipo desenvolvido com soluções comerciais equivalentes.
+Este capítulo apresenta a lista de materiais com os respetivos preços de aquisição e compara o custo total do protótipo desenvolvido com soluções comerciais equivalentes.
 \end{introduction}
-
-
 
 \section{Lista de Materiais e Preços}
 \label{sec:lista-materiais}
 
-A Tabela~\ref{tab:lista-materiais} apresenta a lista completa dos componentes eletrónicos, mecânicos e consumíveis utilizados no protótipo, com os respetivos preços unitários e totais. Os preços indicados correspondem aos valores de aquisição efetiva ou, quando não disponíveis, a estimativas baseadas em preços de mercado em fornecedores de eletrónica e componentes mecânicos de uso geral à data de realização do projeto.
+A Tabela~\ref{tab:bom} apresenta a lista completa de componentes adquiridos para a construção do protótipo, com as quantidades, preços unitários e totais correspondentes. Todos os preços incluem IVA à taxa legal em vigor e correspondem aos valores de aquisição efetiva registados durante o desenvolvimento do projeto. Os componentes eletrónicos foram adquiridos na loja Mauser; os componentes mecânicos do sistema de translação na loja online Fillment3D; e os acoplamentos flexíveis na Amazon Espanha. Os parafusos e porcas utilizados na montagem estavam disponíveis em laboratório e não foram contabilizados no custo total.
+
+A estrutura mecânica --- base, plataforma superior, colunas de suporte com rótulas e suportes dos motores --- foi fabricada por impressão 3D a partir de filamento PLA, tendo sido consumido menos de um quilograma de material ao longo de todo o projeto.
 
 \begin{table}[h]
 \centering
-\caption{Lista de materiais e preços do protótipo da mesa sísmica.}
-\label{tab:lista-materiais}
-\begin{tabular}{lccr}
+\caption{Lista de materiais (\textit{Bill of Materials}) do protótipo da mesa sísmica.}
+\label{tab:bom}
+\begin{tabular}{p{6.2cm}ccrr}
 \hline
-\textbf{Componente} & \textbf{Qty.} & \textbf{Preço unit. (\euro{})} & \textbf{Total (\euro{})} \\
+\textbf{Componente} & \textbf{Fornecedor} & \textbf{Qty.} & \textbf{P. unit. (\euro{})} & \textbf{Total (\euro{})} \\
 \hline
-Microcontrolador ESP32 (38 pinos) & 1 & $\sim$5{,}00 & $\sim$5{,}00 \\
-CNC Shield para ESP32 & 1 & $\sim$8{,}00 & $\sim$8{,}00 \\
-\textit{Driver} DRV8825 (módulo) & 4 & $\sim$2{,}00 & $\sim$8{,}00 \\
-Motor de passo NEMA17 & 4 & $\sim$10{,}00 & $\sim$40{,}00 \\
-Fuso trapezoidal Tr8$\times$8 + porca (par) & 2 & $\sim$8{,}00 & $\sim$16{,}00 \\
-Varão de guia linear (\O{}6\,mm ou \O{}8\,mm) & \textit{(a completar)} & \textit{(a completar)} & \textit{(a completar)} \\
-Rolamentos lineares LM6UU / LM8UU & \textit{(a completar)} & \textit{(a completar)} & \textit{(a completar)} \\
-Acoplamento flexível motor--fuso & 4 & $\sim$2{,}00 & $\sim$8{,}00 \\
-Filamento FDM (PLA/PETG, por kg) & \textit{(a completar)} & \textit{(a completar)} & \textit{(a completar)} \\
-Fonte de alimentação DC externa & 1 & $\sim$15{,}00 & $\sim$15{,}00 \\
-Cabo USB para ESP32 & 1 & $\sim$3{,}00 & $\sim$3{,}00 \\
-Parafusos e porcas M3/M4 (kit) & 1 & $\sim$5{,}00 & $\sim$5{,}00 \\
-\textit{Heat-set inserts} M3 (kit) & 1 & $\sim$5{,}00 & $\sim$5{,}00 \\
-Fios e conectores & --- & --- & $\sim$5{,}00 \\
+\multicolumn{5}{l}{\textit{Eletrónica}} \\
 \hline
-\textbf{TOTAL estimado} & & & \textbf{\textit{(a completar)}} \\ % TODO: substituir pelo total real do orçamento
+Microcontrolador Joy-IT NodeMCU-ESP32-C~\cite{JoyITESP32}
+  & Mauser & 1 & 11,55 & 11,55 \\
+Kit CNC Shield + 4$\times$ DRV8825 Joy-IT ARD-CNC-Kit2~\cite{JoyITCNCKit2}
+  & Mauser & 1 & 21,45 & 21,45 \\
+Motor de passo Joy-IT NEMA17-04~\cite{JoyITNEMA17}
+  & Mauser & 4 & 12,00 & 48,00 \\
+Fonte de alimentação DC 12\,V / 16,5\,A / 200\,W~\cite{FonteMauser}
+  & Mauser & 1 & 14,69 & 14,69 \\
+Cabos \textit{jumper} Dupont F--F 300\,mm (40 un.)~\cite{JumperFF}
+  & Mauser & 1 & 5,20 & 5,20 \\
+Cabos \textit{jumper} Dupont M--M 300\,mm (40 un.)~\cite{JumperMM}
+  & Mauser & 1 & 7,16 & 7,16 \\
+Cabos \textit{jumper} Dupont M--F 300\,mm (40 un.)~\cite{JumperMF}
+  & Mauser & 1 & 5,20 & 5,20 \\
+\textit{Breadboard} 830 contactos~\cite{BreadboardMauser}
+  & Mauser & 2 & 3,24 & 6,48 \\
 \hline
+\multicolumn{5}{l}{\textit{Mecânica}} \\
+\hline
+Varão trapezoidal TR8$\times$8, \textit{lead} 8\,mm (cortado a meio)~\cite{Fillment3DVarao}
+  & Fillment3D & 2 & 4,54 & 9,07 \\
+Porca T8 em POM, \textit{lead} 8\,mm~\cite{Fillment3DPorca}
+  & Fillment3D & 4 & 1,95 & 7,80 \\
+Acoplamento flexível motor--fuso (pack de 5, utilizados 4)~\cite{AcopladorAmazon}
+  & Amazon ES & 1\,pack & 8,99 & 8,99 \\
+\hline
+\multicolumn{5}{l}{\textit{Fabricação}} \\
+\hline
+Filamento PLA 1,75\,mm ($<$1\,kg utilizado)
+  & --- & $<$1\,kg & 17,00/kg & $<$17,00 \\
+\hline
+\textbf{TOTAL} & & & & \textbf{$\approx$152,59} \\
+\hline
+\multicolumn{5}{l}{\footnotesize Parafusos e porcas M3/M4 disponíveis em laboratório --- não contabilizados.} \\
+\multicolumn{5}{l}{\footnotesize Preço do filamento contabilizado pelo máximo (1\,kg); custo real inferior.} \\
 \end{tabular}
 \end{table}
 
-% TODO: COMPLETAR --- Actualiza a tabela acima com os preços e quantidades reais, obtidos a partir do ficheiro de orçamento (Orçamento\_Mauser.pdf e outros recibos de compra). Preenche as células marcadas como \% TODO com os valores reais (quantidade, preço unitário e total) e calcula o custo total real na última linha. Se existirem componentes adicionais não listados, acrescenta linhas à tabela.
-
-Importa salientar que os preços indicados para componentes eletrónicos (ESP32, DRV8825, motores NEMA17) correspondem a preços de mercado em fornecedores de eletrónica de consumo e \textit{makers} (ex: AliExpress, Mauser, RS Components), que são significativamente mais baixos do que os preços praticados em distribuidores industriais. Esta acessibilidade de preços é uma condição essencial para que o projeto cumpra o objetivo de ser reproduzível por instituições com orçamentos limitados.
-
+O custo total do protótipo situa-se em aproximadamente 153\,\euro{}, valor que inclui todos os componentes eletrónicos, mecânicos e de cablagem adquiridos especificamente para este projeto. Este valor está muito abaixo do limite de 500\,\euro{} estabelecido como requisito não funcional (RNF1, Capítulo~\ref{chapter:requirements}), confirmando que o objetivo de baixo custo foi amplamente atingido, com uma margem de mais de 3:1 face ao teto definido. Importa salientar que este custo reflete uma única unidade construída sem qualquer otimização de fornecimento; em produções de maior escala ou com acesso a fornecedores de componentes em volume, o custo unitário poderia ser reduzido de forma significativa.
 
 \section{Comparação com Soluções Comerciais}
 \label{sec:comparacao-comercial}
 
-A Tabela~\ref{tab:comparacao-custos} apresenta uma comparação direta entre o protótipo desenvolvido e as soluções comerciais mais relevantes identificadas no estado da arte (Capítulo~\ref{chapter:state-of-the-art}), em termos de custo estimado, número de eixos, capacidade de reproduzir sismos reais e disponibilidade em regime \textit{open-source}.
+A Tabela~\ref{tab:comparacao-custos} apresenta uma comparação direta entre o protótipo desenvolvido e as soluções identificadas no estado da arte (Capítulo~\ref{chapter:stateofart}), em termos de custo, número de eixos, capacidade de reproduzir sismos reais, utilização de impressão 3D e disponibilidade em regime \textit{open-source}.
 
 \begin{table}[h]
 \centering
-\caption{Comparação de custo e funcionalidades entre o protótipo e soluções comerciais.}
+\caption{Comparação entre o protótipo e soluções de mesas sísmicas existentes.}
 \label{tab:comparacao-custos}
-\begin{tabular}{lcccc}
+\begin{tabular}{lccccc}
 \hline
-\textbf{Solução} & \textbf{Custo estimado} & \textbf{Eixos} & \textbf{Sismos reais} & \textbf{\textit{Open-source}} \\
+\textbf{Solução} & \textbf{Custo} & \textbf{Eixos} & \textbf{Sismos reais} & \textbf{Imp. 3D} & \textbf{\textit{Open-source}} \\
 \hline
-Quanser Shake Table II XY & $>$10\,000\,\euro{} & 2 & Sim & Não \\
-MTS / Servotest (industrial) & $>$100\,000\,\euro{} & Até 6 & Sim & Não \\
-Mesa académica típica & $\sim$100--300\,\euro{} & 1 & Não & Parcial \\
-Este projeto & $<$500\,\euro{} & 2 & Sim & Sim \\
+Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} & $>$10\,000\,\euro{} & 2 & Sim & Não & Não \\
+Quanser Shake Table III XY~\cite{QuanserShakeTableIII} & $>>$10\,000\,\euro{} & 2 & Sim & Não & Não \\
+SARSAR~\cite{Damci2018}                                & 770--1\,800\,USD   & 1 & Sim & Não & Parcial \\
+Shakebot~\cite{Shakebot2022}                           & 1\,300\,USD        & 1 & Sim & Parcial & Sim \\
+Mesa 2-DOF~\cite{2DOF2025}                             & $\sim$2\,500\,USD* & 2 & Sim & Não & Sim \\
+\textbf{Este projeto}                                  & \textbf{$\approx$153\,\euro{}} & \textbf{2} & \textbf{Sim} & \textbf{Sim} & \textbf{Sim} \\
 \hline
+\multicolumn{6}{l}{\footnotesize * Custo estimado incluindo componente já existente em laboratório, avaliado em 1\,000\,USD.} \\
 \end{tabular}
 \end{table}
 
-Da análise da tabela ressaltam três aspetos diferenciadores do presente projeto. Em primeiro lugar, é a única solução identificada que combina simultaneamente as características de ser bi-axial, de custo reduzido e de ser totalmente \textit{open-source}. Em segundo lugar, o rácio de custo face à solução comercial bi-axial mais próxima (Quanser Shake Table II XY) é superior a 20:1 — ou seja, o presente protótipo custa menos de 5\% do valor da solução comercial equivalente em funcionalidades básicas. Em terceiro lugar, a natureza \textit{open-source} e reprodutível do projeto significa que o custo unitário poderia ser ainda mais reduzido em produções de maior escala, com acesso a fornecedores de componentes em volume ou com impressoras 3D de maior produtividade.
+Da análise da tabela ressaltam três aspetos diferenciadores do presente projeto. Primeiro, é a única solução identificada que combina simultaneamente as características de ser bi-axial, de custo reduzido, construída com impressão 3D e totalmente \textit{open-source}. Segundo, o rácio de custo face à solução comercial bi-axial mais próxima --- a Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} --- é superior a 65:1, ou seja, o presente protótipo custou menos de 1,6\% do valor estimado para a solução comercial equivalente. Terceiro, mesmo comparado com projetos académicos bi-axiais como a mesa 2-DOF~\cite{2DOF2025}, o protótipo desenvolvido apresenta um custo total inferior, sendo simultaneamente o único a recorrer à impressão 3D como tecnologia de fabrico estrutural.
 
-É importante salientar que esta comparação de custos não pretende equiparar as especificações técnicas das soluções comparadas. A Quanser Shake Table II XY é um instrumento de precisão, com sensores de posição de alta resolução, amplificadores de potência integrados, software de análise avançado e suporte técnico profissional, desenvolvido para aplicações de investigação exigente. O protótipo desenvolvido no presente projeto é, por natureza, uma solução de menor precisão e mais limitada em termos de capacidade de carga, frequências máximas e automação, mas adequada para os objetivos que motivaram o seu desenvolvimento — nomeadamente o apoio ao trabalho de investigação e avaliação de risco sísmico em países em desenvolvimento, onde o acesso a sistemas comerciais é economicamente inviável.
+É importante enquadrar esta comparação com as diferenças de especificações técnicas entre as soluções. A Quanser Shake Table II XY é um instrumento de precisão metrológica, com sensores de posição de alta resolução, amplificadores de potência integrados e software de análise avançado, desenvolvido para investigação exigente. O protótipo aqui descrito é uma solução de menor precisão, com controlo em malha aberta e sem realimentação de posição, mas adequada para o objetivo que motivou o seu desenvolvimento: apoiar o trabalho de avaliação de risco sísmico em países em desenvolvimento, onde o acesso a equipamento comercial é economicamente inviável.

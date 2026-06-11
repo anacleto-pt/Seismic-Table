@@ -15,17 +15,11 @@ Este capítulo define os requisitos funcionais e não funcionais do sistema, bem
 Os requisitos funcionais foram definidos a partir das necessidades concretas do utilizador final, nomeadamente a utilização em contextos de investigação e avaliação de risco sísmico com recursos limitados, e das restrições técnicas impostas pelos componentes selecionados. Descrevem os comportamentos e capacidades que o sistema deve exibir para cumprir os objetivos do projeto.
 
 \begin{itemize}
-    \item \textbf{RF1 --- Movimento bi-axial:} Para simular excitações sísmicas bidimensionais, a plataforma deve mover-se de forma controlada em dois eixos horizontais independentes, designados por eixo~X (direção Este-Oeste) e eixo~Y (direção Norte-Sul).
+    \item \textbf{RF1 --- Movimento bi-axial:} Para simular excitações sísmicas bidimensionais, a plataforma deve mover-se de forma controlada em dois eixos horizontais independentes, designados por eixo~X (direção Norte-Sul) e eixo~Y (direção Este-Oeste).
 
-    \item \textbf{RF2 --- Reprodução de sismo real:} O registo sísmico de El~Centro de 1940, nas suas componentes Norte-Sul e Este-Oeste, deve ser reproduzível a partir de dados de deslocamento pré-processados e codificados no firmware, cobrindo os aproximadamente 53 segundos de registo disponível.
-
-    \item \textbf{RF3 --- Modo de frequência constante:} Importa igualmente suportar um modo de excitação sinusoidal com amplitude e frequência configuráveis pelo utilizador, permitindo o estudo do comportamento de estruturas em regime de excitação periódica estacionária.
-
-    \item \textbf{RF4 --- Controlo manual:} O controlo manual da posição da plataforma deve ser possível sem reconfiguração do firmware, destinando-se a fins de calibração, demonstração e posicionamento inicial.
+    \item \textbf{RF2 --- Reprodução de sismo real:} O registo sísmico de El~Centro de 1940, nas suas componentes Norte-Sul e Este-Oeste, deve ser reproduzível a partir de dados de deslocamento pré-processados e codificados no firmware.
 
     \item \textbf{RF5 --- Frequência de atualização de 50\,Hz:} A taxa de atualização das velocidades dos motores deve ser de 50\,Hz (passo de 20\,ms), garantindo fidelidade temporal na reprodução dos dados sísmicos pré-processados.
-
-    \item \textbf{RF6 --- Telemetria série:} Através da porta série (UART), a 115\,200\,baud, o sistema deve emitir em tempo real a velocidade instantânea de cada um dos quatro motores, num formato compatível com ferramentas de monitorização como o Serial Plotter do Arduino IDE.
 
     \item \textbf{RF7 --- Suporte de modelos de teste:} A plataforma superior deve ter dimensões e resistência estrutural suficientes para receber modelos reduzidos de estruturas, permitindo observar o seu comportamento dinâmico durante os ensaios.
 \end{itemize}
@@ -39,7 +33,7 @@ Para além dos comportamentos funcionais, o sistema tem de satisfazer um conjunt
 \begin{itemize}
     \item \textbf{RNF1 --- Custo:} O custo total do protótipo não deve ultrapassar os 500\,\euro{}, tornando-o acessível em contextos de investigação sísmica com orçamentos limitados e significativamente mais barato do que as soluções comerciais equivalentes.
 
-    \item \textbf{RNF2 --- Reprodutibilidade:} Todos os ficheiros de modelação 3D, o firmware, os scripts Python e a documentação técnica devem estar disponíveis publicamente num repositório de acesso livre, sem necessidade de ferramentas de fabrico especializadas, de modo a que qualquer investigador possa construir uma unidade idêntica.
+    \item \textbf{RNF2 --- Reprodutibilidade:} Todos os ficheiros de modelação 3D, o firmware, os scripts Python e a documentação técnica devem estar disponíveis publicamente, sem necessidade de ferramentas de fabrico especializadas, de modo a que qualquer investigador possa construir uma unidade idêntica a partir dos materiais fornecidos.
 
     \item \textbf{RNF3 --- Segurança:} Fins de curso físicos ou lógicos devem limitar o deslocamento máximo admissível da plataforma em cada eixo, prevenindo colisões destrutivas dos componentes móveis em caso de erro de controlo ou de dados corrompidos.
 
@@ -55,11 +49,9 @@ Para além dos comportamentos funcionais, o sistema tem de satisfazer um conjunt
 As restrições de design delimitam o espaço tecnológico e económico dentro do qual o projeto foi desenvolvido. Parte delas resulta de opções deliberadas orientadas para o baixo custo e a reprodutibilidade; outras decorrem das limitações inerentes aos componentes selecionados.
 
 \begin{itemize}
-    \item \textbf{RD1 --- Componentes de baixo custo e disponibilidade comercial:} Recorre-se exclusivamente a componentes disponíveis em fornecedores de eletrónica genérica, nomeadamente motores NEMA17, \textit{drivers} DRV8825, microcontrolador ESP32 e CNC Shield, evitando componentes proprietários ou de difícil aquisição em mercados internacionais.
+    \item \textbf{RD1 --- Componentes de baixo custo e disponibilidade comercial:} Recorre-se exclusivamente a componentes disponíveis em fornecedores de eletrónica genérica, nomeadamente motores NEMA17, \textit{drivers} DRV8825, microcontrolador ESP32 e CNC Shield. A translação linear baseia-se em fusos trapezoidais com \textit{lead} de 8\,mm por revolução, por oferecerem um equilíbrio adequado entre custo, precisão e capacidade de carga evitando componentes proprietários ou de difícil aquisição em mercados internacionais.
 
-    \item \textbf{RD2 --- Estrutura mecânica em impressão 3D:} Os componentes mecânicos estruturais são fabricados exclusivamente por impressão FDM, sem recurso a maquinagem CNC ou outros processos subtrativos, de forma a garantir a reprodutibilidade por qualquer utilizador com acesso a uma impressora de gama de entrada.
-
-    \item \textbf{RD3 --- Mecanismo de translação por fuso trapezoidal:} A translação linear baseia-se em fusos trapezoidais com \textit{lead} de 8\,mm por revolução, por oferecerem um equilíbrio adequado entre custo, precisão e capacidade de carga para esta aplicação, sem requererem lubrificação especializada nem manutenção frequente.
+    \item \textbf{RD2 --- Estrutura mecânica em impressão 3D:} Os componentes mecânicos estruturais são fabricados exclusivamente por impressão 3D, sem recurso a maquinagem CNC ou outros processos subtrativos, de forma a garantir a reprodutibilidade por qualquer utilizador com acesso a uma impressora de gama de entrada.
 
     \item \textbf{RD4 --- Microcontrolador ESP32 com CNC Shield:} O controlo baseia-se no ESP32 em conjunto com uma CNC Shield compatível, que providencia a interface normalizada entre o microcontrolador e os \textit{drivers} dos motores, simplificando consideravelmente a cablagem.
 

@@ -48,7 +48,7 @@
 %%% |             |   | dgeo        |
 %%% ---------------   --------------
 %% Import the UA thesis template
-\usepackage[engineering,civil,final]{uaThesisTemplate}
+\usepackage[engineering,decivil,final]{uaThesisTemplate}
 
 
 %% Optional packages for utf8 encoding and T1 fonts
@@ -59,7 +59,7 @@
 \usepackage{lmodern}
 
 %% We will use english and portuguese
-\usepackage[english,portuguese]{babel}
+\usepackage[portuguese, english]{babel}
 
 \usepackage{xspace}% used by \sigla
 
@@ -107,6 +107,11 @@
 %%%  line as many times as you want, or remove it
 %%%  if you only want the portuguese title.
 %% Optional Titles in additional languages.
+
+
+
+
+%%%%========================English==================================
 \TitleEN{Development of an Earthquake Shaking Table using 3D Printing}
 
 %%% OPTIONAL: add a quotation if you like.
@@ -163,7 +168,7 @@
 
 %%% OPTIONAL: Add an acknowledgement text
 %% Optional Acknowledgement text
-\Acknowledgements{Agradeço ao Professor Vítor Silva pela orientação, disponibilidade e entusiasmo ao longo de todo o projeto. Ao Professor Victor Neto pelo apoio e co-orientação. À Universidade de Aveiro e ao DFis pelas condições proporcionadas. Aos meus pais pelo apoio e suporte. A todos os colegas e amigos que, de alguma forma, contribuíram para a realização deste trabalho.}
+\Acknowledgements{Agradeço ao Professor Vítor Silva pela orientação, disponibilidade e entusiasmo ao longo de todo o projeto. Ao Professor Victor Neto pelo apoio e co-orientação. À Universidade de Aveiro e ao DFis pelas condições proporcionadas. Aos meus Pais pelo apoio e suporte. A todos os colegas e amigos que, de alguma forma, contribuíram para a realização deste trabalho.}
 
 %%% Edit the keywords and abstract in Portuguese
 %%% Don't forget to remove the \blindtext[3]
@@ -180,8 +185,12 @@
 %%% Don't remove the \selectlanguage statement or you will end with incorrect hyphenation.
 %%% You can modify the language to any other supported by Latex
 %% Optional Keywords and Abstract in additional languages.
+
+
+
+%%%%========================English==================================
 \Abstract{Keywords}{shaking table, 3D printing, stepper motors, ESP32, low-cost, seismic simulation.}
-         {Abstract}{\selectlanguage{english}This document describes the development of a low-cost seismic shaking table using 3D printing techniques, as part of the Final Project for the Bachelor's degree in Computational Engineering at the University of Aveiro. The work was motivated by the need to provide accessible seismic simulation equipment for educational purposes, particularly in developing countries where commercial solutions are cost-prohibitive. The developed system consists of a two-axis (X and Y) platform driven by four NEMA17 stepper motors, controlled by an ESP32 microcontroller through DRV8825 drivers and a CNC Shield. The mechanical structure was manufactured primarily using 3D printing, using trapezoidal lead screws as the translation mechanism. The firmware, developed in C++ using the AccelStepper library, reproduces real seismic records at 50~Hz based on the 1940 \textit{El Centro} earthquake (NS and EW components), previously converted from displacement to motor steps via a Python pipeline. The developed prototype meets the defined functional requirements, enabling real earthquake simulation at a cost significantly lower than existing commercial solutions.}
+     {Abstract}{\selectlanguage{english}This document describes the development of a low-cost seismic shaking table using 3D printing techniques, as part of the Final Project for the Bachelor's degree in Computational Engineering at the University of Aveiro. The work was motivated by the need to provide accessible seismic simulation equipment for educational purposes, particularly in developing countries where commercial solutions are cost-prohibitive. The developed system consists of a two-axis (X and Y) platform driven by four NEMA17 stepper motors, controlled by an ESP32 microcontroller through DRV8825 drivers and a CNC Shield. The mechanical structure was manufactured primarily using 3D printing, using trapezoidal lead screws as the translation mechanism. The firmware, developed in C++ using the AccelStepper library, reproduces real seismic records at 50~Hz based on the 1940 \textit{El Centro} earthquake (NS and EW components), previously converted from displacement to motor steps via a Python pipeline. The developed prototype meets the defined functional requirements, enabling real earthquake simulation at a cost significantly lower than existing commercial solutions.}
 
 %%% Edit the Jury President information.
 %% First Member will be the President of the Jury
