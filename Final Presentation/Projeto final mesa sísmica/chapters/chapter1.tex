@@ -1,39 +1,40 @@
 
+
 \chapter{Introdução}
 \label{chapter:introduction}
 
 \begin{introduction}
-Este capítulo apresenta a motivação e o contexto do projeto, os objetivos definidos e a estrutura do documento.
+O projeto nasceu de um problema concreto: a ausência de equipamento de ensaio sísmico acessível em países com recursos limitados. Este capítulo apresenta esse contexto, define os objetivos que guiaram o desenvolvimento e descreve a organização do documento.
 \end{introduction}
 
 \section{Motivação e Contexto}
 \label{sec:motivacao}
 
-Portugal encontra-se numa zona de moderada a elevada atividade sísmica, condicionada pela proximidade à fronteira entre as placas Euroasiática e Africana, cujo limite ocidental é definido pela falha Açores-Gibraltar~\cite{Borges2001}. Esta configuração tectónica foi responsável por alguns dos eventos sísmicos mais significativos da história da Europa Ocidental, entre os quais se destaca o sismo de 1 de novembro de 1755, estimado com magnitude entre 8,5 e 8,7, que destruiu grande parte de Lisboa e gerou um tsunami de consequências devastadoras~\cite{Baptista1998}. Mais recentemente, estudos de perigosidade sísmica probabilística confirmam que o território português, em particular o Algarve e a região da Grande Lisboa, permanece exposto a um risco sísmico significativo~\cite{Fonseca2007}.
+Portugal situa-se numa zona de atividade sísmica moderada a elevada. A sua posição geográfica, próxima da fronteira entre as placas Euroasiática e Africana, cujo limite ocidental é a falha Açores-Gibraltar~\cite{Borges2001}, explica parte substancial dessa perigosidade. Foi essa mesma configuração que gerou o sismo de 1 de novembro de 1755, estimado com magnitude entre 8,5 e 8,7, que destruiu grande parte de Lisboa e desencadeou um tsunami com consequências devastadoras~\cite{Baptista1998}. Estudos de perigosidade sísmica probabilística confirmam que a situação não é muito diferente hoje: o Algarve e a região da Grande Lisboa permanecem expostos a um risco sísmico considerável~\cite{Fonseca2007}.
 
-Esta realidade não é exclusiva de Portugal: muitos outros países, em particular os menos desenvolvidos, enfrentam riscos sísmicos comparáveis sem dispor de meios adequados para preparar engenheiros capazes de os avaliar e mitigar. O acesso a equipamento de ensaio sísmico experimental é fundamental para o trabalho de avaliação de risco estrutural no terreno, mas as soluções comerciais disponíveis apresentam custos que as tornam economicamente inviáveis nestes contextos.
+O problema não é exclusivo de Portugal. Muitos países, sobretudo os menos desenvolvidos, enfrentam riscos sísmicos comparáveis sem dispor de meios para preparar engenheiros capazes de os avaliar e mitigar. O trabalho de avaliação de risco estrutural no terreno exige acesso a equipamento de ensaio sísmico experimental, mas o custo das soluções comerciais disponíveis coloca-as fora do alcance desses contextos.
 
-Foi precisamente esse problema que motivou o presente projeto. O Professor Vítor Silva, no âmbito das suas atividades de investigação e cooperação técnica no estrangeiro, deparou-se com a ausência de equipamento acessível para realizar ensaios sísmicos portáteis de apoio ao trabalho de avaliação de risco estrutural em países com recursos limitados. As mesas sísmicas disponíveis no mercado, como a \textit{Quanser Shake Table II XY}~\cite{QuanserShakeTableIIXY}, custam mais de dez mil euros, o que as torna economicamente inviáveis em contextos de investigação com recursos limitados. O presente projeto surge assim com o objetivo de colmatar esta lacuna, desenvolvendo uma alternativa de baixo custo, reprodutível e de arquitetura aberta.
+Foi precisamente essa lacuna que motivou o presente projeto. O Professor Vítor Silva deparou-se, durante atividades de investigação e cooperação técnica no estrangeiro, com a ausência de equipamento acessível para realizar ensaios sísmicos portáteis de apoio à avaliação de risco estrutural em países com recursos limitados. As mesas sísmicas disponíveis no mercado, como a \textit{Quanser Shake Table II XY}~\cite{QuanserShakeTableIIXY}, custam mais de dez mil euros. O objetivo do presente projeto é, por isso, desenvolver uma alternativa de baixo custo, reprodutível e de arquitetura aberta.
 
 \section{Objetivos do Projeto}
 \label{sec:objetivos}
 
-O objetivo principal deste projeto é desenvolver uma mesa sísmica de dois eixos, horizontal~(X) e transversal~(Y), de baixo custo, recorrendo predominantemente a peças fabricadas por impressão 3D e a componentes eletrónicos de uso geral. O sistema deve ser funcional, reprodutível e suficientemente barato para uso em contextos de investigação e avaliação de risco sísmico com recursos limitados. Os objetivos específicos são:
+O objetivo central é desenvolver uma mesa sísmica de dois eixos, horizontal~(X) e transversal~(Y), de baixo custo, recorrendo predominantemente a peças fabricadas por impressão 3D e a componentes eletrónicos de uso geral. O sistema tem de ser funcional, reprodutível e suficientemente acessível para uso em investigação e avaliação de risco sísmico com recursos limitados. Os objetivos específicos são:
 
 \begin{itemize}
-    \item Projetar e fabricar, por impressão 3D, os componentes mecânicos estruturais da mesa sísmica, assegurando a rigidez necessária para o movimento bidirecional controlado;
+    \item Projetar e fabricar, por impressão 3D, os componentes mecânicos estruturais da mesa sísmica, com rigidez suficiente para suportar o movimento bidirecional controlado;
     \item Implementar um sistema de atuação baseado em quatro motores de passo NEMA17, controlados por \textit{drivers} DRV8825, com transmissão de movimento por fuso trapezoidal de \textit{lead} de 8\,mm por volta;
-    \item Desenvolver o firmware para o microcontrolador ESP32, utilizando a biblioteca AccelStepper, com suporte a uma janela de execução de 20\,ms por ponto de dados sísmicos, permitindo a reprodução do registo sísmico de El~Centro~(1940)~\cite{Damci2018};
-    \item Garantir a reprodutibilidade do sistema, disponibilizando publicamente todos os ficheiros necessários à construção de uma unidade idêntica, mantendo o custo total significativamente abaixo das soluções comerciais equivalentes~\cite{QuanserShakeTableIIXY}.
+    \item Desenvolver o firmware para o microcontrolador ESP32, com recurso à biblioteca AccelStepper, com uma janela de execução de 20\,ms por ponto de dados sísmicos e capacidade para reproduzir o registo sísmico de El~Centro~(1940)~\cite{Damci2018};
+    \item Assegurar a reprodutibilidade do sistema, pela disponibilização pública de todos os ficheiros necessários à construção de uma unidade idêntica, com custo total significativamente abaixo das soluções comerciais equivalentes~\cite{QuanserShakeTableIIXY}.
 \end{itemize}
 
 \section{Estrutura do Documento}
 \label{sec:estrutura}
 
-O documento está organizado em nove capítulos, acompanhando o desenvolvimento do projeto desde a fundamentação teórica até à validação experimental.
+O documento divide-se em nove capítulos, organizados desde a fundamentação teórica até à validação experimental.
 
-O \textbf{Capítulo~2} revê as soluções existentes de mesas sísmicas, tanto comerciais~\cite{QuanserShakeTableIIXY, QuanserShakeTableIII} como académicas~\cite{Damci2018, Shakebot2022, 2DOF2025}, com as respetivas características, limitações e custos. O \textbf{Capítulo~3} define os requisitos funcionais e não funcionais do sistema e as restrições de \textit{design} adotadas.
+O \textbf{Capítulo~2} revê as soluções existentes de mesas sísmicas, tanto comerciais~\cite{QuanserShakeTableIIXY, QuanserShakeTableIII} como académicas~\cite{Damci2018, Shakebot2022, 2DOF2025}, com as respetivas características, limitações e custos. Os requisitos funcionais e não funcionais do sistema, bem como as restrições de \textit{design} adotadas, estão definidos no \textbf{Capítulo~3}.
 
-O \textbf{Capítulo~4} descreve a arquitetura geral do sistema e a interação entre os subsistemas mecânico, elétrico e de software. O \textbf{Capítulo~5} apresenta o \textit{hardware} desenvolvido: a estrutura mecânica impressa em 3D, o sistema de atuação com motores NEMA17 e o circuito de controlo baseado no ESP32. O \textbf{Capítulo~6} cobre o software e o firmware, incluindo o \textit{pipeline} de processamento de dados sísmicos em Python e a lógica de controlo desenvolvida para o ESP32.
+A arquitetura geral e a interação entre os subsistemas mecânico, elétrico e de software são descritas no \textbf{Capítulo~4}. Os dois capítulos seguintes cobrem a implementação: o \textbf{Capítulo~5} detalha o \textit{hardware} desenvolvido, desde a estrutura mecânica impressa em 3D ao circuito de controlo baseado no ESP32, e o \textbf{Capítulo~6} trata o software e o firmware, incluindo o \textit{pipeline} de processamento de dados sísmicos em Python e a lógica de controlo do ESP32.
 
-O \textbf{Capítulo~7} apresenta a metodologia de testes e os resultados da validação experimental, com a análise dos erros e limitações identificadas. O \textbf{Capítulo~8} expõe a análise de custos e compara o projeto com soluções comerciais equivalentes~\cite{QuanserShakeTableIIXY}. O \textbf{Capítulo~9} apresenta as conclusões, sintetiza as limitações do trabalho e propõe direções para trabalho futuro.
+O \textbf{Capítulo~7} expõe a metodologia de testes e os resultados da validação experimental, com análise dos erros e limitações identificadas. A análise de custos e a comparação com soluções comerciais equivalentes~\cite{QuanserShakeTableIIXY} ocupam o \textbf{Capítulo~8}. O documento encerra com o \textbf{Capítulo~9}, que sintetiza as conclusões e propõe direções para trabalho futuro.

@@ -4,7 +4,7 @@
 \label{chapter:costs}
 
 \begin{introduction}
-Este capítulo apresenta a lista de materiais com os respetivos preços de aquisição e compara o custo total do protótipo desenvolvido com soluções comerciais equivalentes.
+Este capítulo detalha os custos de construção do protótipo e confronta o valor obtido com o das soluções comerciais e académicas identificadas no estado da arte.
 \end{introduction}
 
 \section{Lista de Materiais e Preços}
@@ -12,7 +12,7 @@ Este capítulo apresenta a lista de materiais com os respetivos preços de aquis
 
 A Tabela~\ref{tab:bom} apresenta a lista completa de componentes adquiridos para a construção do protótipo, com as quantidades, preços unitários e totais correspondentes. Todos os preços incluem IVA à taxa legal em vigor e correspondem aos valores de aquisição efetiva registados durante o desenvolvimento do projeto. Os componentes eletrónicos foram adquiridos na loja Mauser; os componentes mecânicos do sistema de translação na loja online Fillment3D; e os acoplamentos flexíveis na Amazon Espanha. Os parafusos e porcas utilizados na montagem estavam disponíveis em laboratório e não foram contabilizados no custo total.
 
-A estrutura mecânica --- base, plataforma superior, colunas de suporte com rótulas e suportes dos motores --- foi fabricada por impressão 3D a partir de filamento PLA, tendo sido consumido menos de um quilograma de material ao longo de todo o projeto.
+A estrutura mecânica (base, plataforma superior, colunas de suporte com rótulas e suportes dos motores) foi fabricada por impressão 3D a partir de filamento PLA, com um consumo total de um quilograma de material.
 
 \begin{table}[h]
 \centering
@@ -52,17 +52,17 @@ Acoplamento flexível motor--fuso (pack de 5, utilizados 4)~\cite{AcopladorAmazo
 \hline
 \multicolumn{5}{l}{\textit{Fabricação}} \\
 \hline
-Filamento PLA 1,75\,mm ($<$1\,kg utilizado)
-  & --- & $<$1\,kg & 17,00/kg & $<$17,00 \\
+Filamento PLA 1,75\,mm (1\,kg utilizado)
+  & --- & 1\,kg & 35,00/kg & 35,00 \\
 \hline
-\textbf{TOTAL} & & & & \textbf{$\approx$152,59} \\
+\textbf{TOTAL} & & & & \textbf{$\approx$180,59} \\
 \hline
 \multicolumn{5}{l}{\footnotesize Parafusos e porcas M3/M4 disponíveis em laboratório --- não contabilizados.} \\
-\multicolumn{5}{l}{\footnotesize Preço do filamento contabilizado pelo máximo (1\,kg); custo real inferior.} \\
+\multicolumn{5}{l}{\footnotesize Filamento PLA: 1\,kg consumido na totalidade a 35,00\,€/kg.} \\
 \end{tabular}
 \end{table}
 
-O custo total do protótipo situa-se em aproximadamente 153\,\euro{}, valor que inclui todos os componentes eletrónicos, mecânicos e de cablagem adquiridos especificamente para este projeto. Este valor está muito abaixo do limite de 500\,\euro{} estabelecido como requisito não funcional (RNF1, Capítulo~\ref{chapter:requirements}), confirmando que o objetivo de baixo custo foi amplamente atingido, com uma margem de mais de 3:1 face ao teto definido. Importa salientar que este custo reflete uma única unidade construída sem qualquer otimização de fornecimento; em produções de maior escala ou com acesso a fornecedores de componentes em volume, o custo unitário poderia ser reduzido de forma significativa.
+O custo total do protótipo situa-se em aproximadamente 181\,\euro{}, valor que inclui todos os componentes eletrónicos, mecânicos e de cablagem adquiridos especificamente para este projeto. Fica bem abaixo do limite de 500\,\euro{} estabelecido como requisito não funcional (RNF1, Capítulo~\ref{chapter:requirements}), com uma margem de quase 3:1 face ao teto definido. Este custo reflete uma única unidade construída sem otimização de fornecimento; em produções de maior escala ou com acesso a fornecedores em volume, o custo unitário seria consideravelmente mais baixo.
 
 \section{Comparação com Soluções Comerciais}
 \label{sec:comparacao-comercial}
@@ -75,19 +75,17 @@ A Tabela~\ref{tab:comparacao-custos} apresenta uma comparação direta entre o p
 \label{tab:comparacao-custos}
 \begin{tabular}{lccccc}
 \hline
-\textbf{Solução} & \textbf{Custo} & \textbf{Eixos} & \textbf{Sismos reais} & \textbf{Imp. 3D} & \textbf{\textit{Open-source}} \\
+\textbf{Solução} & \textbf{Custo} & \textbf{Eixos} & \textbf{Sismos reais} & \textbf{Imp. 3D} \\
 \hline
-Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} & $>$10\,000\,\euro{} & 2 & Sim & Não & Não \\
-Quanser Shake Table III XY~\cite{QuanserShakeTableIII} & $>>$10\,000\,\euro{} & 2 & Sim & Não & Não \\
-SARSAR~\cite{Damci2018}                                & 770--1\,800\,USD   & 1 & Sim & Não & Parcial \\
-Shakebot~\cite{Shakebot2022}                           & 1\,300\,USD        & 1 & Sim & Parcial & Sim \\
-Mesa 2-DOF~\cite{2DOF2025}                             & $\sim$2\,500\,USD* & 2 & Sim & Não & Sim \\
-\textbf{Este projeto}                                  & \textbf{$\approx$153\,\euro{}} & \textbf{2} & \textbf{Sim} & \textbf{Sim} & \textbf{Sim} \\
+Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} & $>$10\,000\,\euro{} & 2 & Sim & Não \\
+Quanser Shake Table III XY~\cite{QuanserShakeTableIII} & $>>$10\,000\,\euro{} & 2 & Sim & Não \\
+SARSAR~\cite{Damci2018}                                & 770--1\,800\,USD   & 1 & Sim & Não \\
+Shakebot~\cite{Shakebot2022}                           & 1\,300\,USD        & 1 & Sim & Parcial \\
+Mesa 2-DOF~\cite{2DOF2025}                             & $\sim$2\,500\,USD* & 2 & Sim & Não \\
+\textbf{Este projeto}                                  & \textbf{$\approx$181\,\euro{}} & \textbf{2} & \textbf{Sim} & \textbf{Sim} \\
 \hline
-\multicolumn{6}{l}{\footnotesize * Custo estimado incluindo componente já existente em laboratório, avaliado em 1\,000\,USD.} \\
+\multicolumn{5}{l}{\footnotesize * Custo estimado incluindo componente já existente em laboratório, avaliado em 1\,000\,USD.} \\
 \end{tabular}
 \end{table}
 
-Da análise da tabela ressaltam três aspetos diferenciadores do presente projeto. Primeiro, é a única solução identificada que combina simultaneamente as características de ser bi-axial, de custo reduzido, construída com impressão 3D e totalmente \textit{open-source}. Segundo, o rácio de custo face à solução comercial bi-axial mais próxima --- a Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} --- é superior a 65:1, ou seja, o presente protótipo custou menos de 1,6\% do valor estimado para a solução comercial equivalente. Terceiro, mesmo comparado com projetos académicos bi-axiais como a mesa 2-DOF~\cite{2DOF2025}, o protótipo desenvolvido apresenta um custo total inferior, sendo simultaneamente o único a recorrer à impressão 3D como tecnologia de fabrico estrutural.
-
-É importante enquadrar esta comparação com as diferenças de especificações técnicas entre as soluções. A Quanser Shake Table II XY é um instrumento de precisão metrológica, com sensores de posição de alta resolução, amplificadores de potência integrados e software de análise avançado, desenvolvido para investigação exigente. O protótipo aqui descrito é uma solução de menor precisão, com controlo em malha aberta e sem realimentação de posição, mas adequada para o objetivo que motivou o seu desenvolvimento: apoiar o trabalho de avaliação de risco sísmico em países em desenvolvimento, onde o acesso a equipamento comercial é economicamente inviável.
+Da análise da tabela ressaltam três aspetos diferenciadores do presente projeto. Primeiro, é a única solução identificada que combina simultaneamente as características de ser bi-axial, de custo reduzido e construída com impressão 3D. Segundo, o rácio de custo face à solução comercial bi-axial mais próxima (a Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY}) é superior a 65:1, ou seja, o presente protótipo custou menos de 1,9\% do valor estimado para a solução comercial equivalente. Terceiro, mesmo confrontado com projetos académicos bi-axiais como a mesa 2-DOF~\cite{2DOF2025}, o protótipo apresenta um custo total inferior e é o único a recorrer à impressão 3D como tecnologia de fabrico estrutural.

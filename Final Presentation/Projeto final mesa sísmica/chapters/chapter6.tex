@@ -4,7 +4,7 @@
 \label{chapter:software}
 
 \begin{introduction}
-Este capítulo descreve o pipeline de dados sísmicos e o firmware desenvolvido para o ESP32, incluindo o controlo síncrono dos motores e os modos de operação do sistema.
+Este capítulo explica como os dados brutos de deslocamento sísmico se transformam em movimento físico da plataforma: primeiro pelo pipeline de pré-processamento em Python, depois pelo firmware do ESP32 que os executa a 50\,Hz.
 \end{introduction}
 
 
@@ -12,17 +12,17 @@ Este capítulo descreve o pipeline de dados sísmicos e o firmware desenvolvido 
 \section{Pipeline de Dados Sísmicos}
 \label{sec:pipeline-dados}
 
-O pipeline de dados sísmicos constitui o elo entre os dados históricos do registo de El Centro e o movimento físico da plataforma. O processo divide-se em três etapas principais: a obtenção e preparação dos dados de deslocamento em formato CSV, a conversão para sequências de passos de motor através de um script Python, e a geração dos arrays C++ a embutir no firmware. Este pipeline é executado em modo \textit{offline}, sendo necessário repetir a sua execução apenas quando se pretende alterar o registo sísmico utilizado, os parâmetros do sistema (lead, microstepping, fator de escala) ou a resolução temporal de amostragem.
+O pipeline de dados sísmicos é o elo entre os dados históricos do registo de El Centro e o movimento físico da plataforma. O processo tem três etapas: obtenção e preparação dos dados de deslocamento em formato CSV, conversão para sequências de passos de motor por um script Python e geração dos arrays C++ a embutir no firmware. Este pipeline corre em modo \textit{offline} e só precisa de ser repetido quando se pretende alterar o registo sísmico, os parâmetros do sistema (lead, microstepping, fator de escala) ou a resolução temporal de amostragem.
 
 
 \subsection{Fonte de Dados --- Registo de El Centro}
 \label{subsec:fonte-dados}
 
-O registo sísmico de El Centro de 1940, formalmente designado por \textit{Imperial Valley Earthquake} de 18 de maio de 1940, é um dos registos acelerométricos mais utilizados e documentados na literatura de engenharia sísmica. Com uma magnitude de aproximadamente 6,9 na escala de Richter, o sismo afetou a região do Imperial Valley, na Califórnia (EUA), e o registo obtido na estação de El Centro (Imperial Valley Irrigation District) tornou-se uma referência fundamental para a avaliação do comportamento sísmico de estruturas, por ter sido um dos primeiros registos de forte movimento do solo obtidos com qualidade instrumental adequada e por abranger uma gama de frequências relevante para estruturas de edifícios correntes.
+O registo sísmico de El Centro de 1940, formalmente designado por \textit{Imperial Valley Earthquake} de 18 de maio de 1940, é um dos registos acelerométricos mais utilizados e documentados na literatura de engenharia sísmica. Com uma magnitude de aproximadamente 6,9 na escala de Richter, o sismo afetou a região do Imperial Valley, na Califórnia (EUA). O registo obtido na estação de El Centro (Imperial Valley Irrigation District) tornou-se referência na literatura de engenharia sísmica experimental, por ter sido um dos primeiros registos de forte movimento do solo com qualidade instrumental adequada e por abranger uma gama de frequências relevante para estruturas de edifícios correntes.
 
-O registo é composto por duas componentes horizontais ortogonais: Norte-Sul (NS) e Este-Oeste (EW), cada uma disponível em séries temporais de aceleração, velocidade e deslocamento do solo, com um intervalo de amostragem de 20\,ms. Para o presente projeto, foram utilizados os dados de deslocamento (em metros), por serem a grandeza diretamente relevante para o controlo de posição da plataforma. O ficheiro NS apresenta 2687 amostras e o ficheiro EW apresenta 2673 amostras, correspondendo a aproximadamente 53 segundos de registo sísmico.
+O registo é composto por duas componentes horizontais ortogonais: Norte-Sul (NS) e Este-Oeste (EW), cada uma disponível em séries temporais de aceleração, velocidade e deslocamento do solo, com um intervalo de amostragem de 20\,ms. Para o presente projeto, foram utilizados os dados de deslocamento (em metros), por serem a grandeza diretamente relevante para o controlo de posição da plataforma. O ficheiro NS apresenta 2687 amostras e o ficheiro EW apresenta 2673, o que corresponde a aproximadamente 53 segundos de registo sísmico.
 
-Os dados sísmicos utilizados foram fornecidos pelo orientador do projeto, Professor Vítor Silva, sob a forma de um ficheiro Microsoft Excel (\texttt{.xlsx}), denominado \texttt{ElCentro.xlsx}. O ficheiro continha duas folhas de cálculo, uma para cada componente horizontal do registo: Norte-Sul (NS) e Este-Oeste (EW). Cada folha apresentava três colunas: tempo (em segundos), aceleração (em m/s\textsuperscript{2}) e deslocamento (em metros), com um intervalo de amostragem de 20\,ms. Os dados de deslocamento foram utilizados diretamente pelo script Python, sem necessidade de integração numérica adicional, uma vez que o ficheiro já continha os valores de deslocamento processados. O registo corresponde ao sismo de El~Centro de 18 de maio de 1940 (Imperial Valley), captado na estação Imperial Valley Array \#9, e é amplamente utilizado como referência na engenharia sísmica experimental~\cite{Damci2018, 2DOF2025}.
+Os dados sísmicos utilizados foram fornecidos pelo orientador do projeto, Professor Vítor Silva, sob a forma de um ficheiro Microsoft Excel (\texttt{.xlsx}), denominado \texttt{ElCentro.xlsx}. O ficheiro continha duas folhas de cálculo, uma para cada componente horizontal do registo: Norte-Sul (NS) e Este-Oeste (EW). Cada folha apresentava três colunas: tempo (em segundos), aceleração (em m/s\textsuperscript{2}) e deslocamento (em metros), com um intervalo de amostragem de 20\,ms. Os dados de deslocamento foram utilizados diretamente pelo script Python, sem necessidade de integração numérica adicional, uma vez que o ficheiro já continha os valores de deslocamento processados. O registo corresponde ao sismo de El~Centro de 18 de maio de 1940 (Imperial Valley), captado na estação Imperial Valley Array \#9~\cite{ElCentro1940}, e é amplamente utilizado como referência na engenharia sísmica experimental~\cite{Damci2018, 2DOF2025}.
 
 
 \subsection{Conversão de Deslocamento para Passos de Motor (Python)}
@@ -35,7 +35,7 @@ A conversão dos dados de deslocamento em passos de motor baseia-se no princípi
 \label{eq:delta-deslocamento}
 \end{equation}
 
-Este incremento é então convertido para o número de passos de motor correspondente, tendo em conta o \textit{lead} do fuso, o ângulo de passo do motor e o modo de \textit{microstepping} configurado:
+Este incremento é então convertido para o número de passos de motor correspondente, a partir do \textit{lead} do fuso, do ângulo de passo do motor e do modo de \textit{microstepping} configurado:
 
 \begin{equation}
 \text{steps}_i = \left\lfloor f_{\text{ajuste}} \cdot \frac{\Delta d_i \times 1000}{\text{lead}} \cdot \frac{360°}{\theta_{\text{passo}}} \cdot M_{\text{micro}} \right\rfloor
@@ -84,7 +84,7 @@ def steps_calc(data_ns, data_ew, adjustment, microstepping,
 
 Os arrays resultantes \texttt{steps\_N}, \texttt{steps\_S}, \texttt{steps\_E} e \texttt{steps\_W} são posteriormente serializados como arrays estáticos em C++ e inseridos no ficheiro de firmware, onde ficam armazenados em memória \textit{flash} do ESP32 e disponíveis para execução em tempo real.
 
-A relação de simetria entre os motores opostos de cada eixo — $\text{steps\_S} = -\text{steps\_N}$ e $\text{steps\_W} = -\text{steps\_E}$ — garante que, quando um motor avança na direção positiva, o motor oposto avança na direção negativa. Este comportamento em contrafase produz um deslocamento linear efetivo da plataforma: ambos os motores puxam ou empurram a plataforma na mesma direção física, com esforços complementares.
+A relação de simetria entre os motores opostos de cada eixo ($\text{steps\_S} = -\text{steps\_N}$ e $\text{steps\_W} = -\text{steps\_E}$) garante que, quando um motor avança na direção positiva, o motor oposto avança na direção negativa. Este comportamento em contrafase produz um deslocamento linear efetivo da plataforma: ambos os motores puxam ou empurram a plataforma na mesma direção física, com esforços complementares.
 
 
 \subsection{Parâmetros --- Lead do Fuso, Microstepping, Steps por Revolução}
@@ -104,7 +104,7 @@ Lead do fuso & 8\,mm/rev & Deslocamento linear por revolução completa \\
 Ângulo de passo (NEMA17) & 1,8° & Passo nominal do motor em \textit{full-step} \\
 Passos por revolução (\textit{full-step}) & 200 & $= 360º / 1{,}8°$ \\
 Microstepping configurado & $1/2$ & Jumpers M0 na CNC Shield \\
-Resolução linear por passo & $0{,}02$ & $= 8\,\text{mm} / (200 \times 2\ ({\text{Microstepping}}))$ \\ 
+Resolução linear por passo & $0{,}02$ & $= 8\,\text{mm} / (200 \times 2\ ({\text{Microstepping}}))$ \\
 Fator de ajuste ($f_{\text{ajuste}}$) & $1$ & Fator de escala da amplitude \\
 Intervalo temporal & 20\,ms & Duração de cada janela de dados \\
 Frequência de atualização & 50\,Hz & $= 1 / 0{,}02\,\text{s}$ \\
@@ -118,51 +118,21 @@ Amostras EW (El Centro) & 2673 & Duração $\approx$ 53,5\,s \\
 \section{Firmware do ESP32}
 \label{sec:firmware-esp32}
 
-O firmware do ESP32 é o componente responsável pela execução em tempo real da sequência de passos pré-calculada, pelo controlo síncrono dos quatro motores. É desenvolvido em C++ utilizando o Arduino IDE com suporte para ESP32, aproveitando o vasto ecossistema de bibliotecas disponível, em particular a biblioteca AccelStepper.
+O firmware do ESP32 executa em tempo real a sequência de passos pré-calculada e controla os quatro motores em simultâneo. É desenvolvido em C++ com o Arduino IDE (com suporte para ESP32), o que permite usar o vasto ecossistema de bibliotecas disponível, em particular a biblioteca AccelStepper.
 
 
 \subsection{Biblioteca AccelStepper --- Modo Velocidade Instantânea}
 \label{subsec:accelstepper}
 
-A biblioteca AccelStepper, desenvolvida por Mike McCauley e amplamente adotada no ecossistema Arduino, oferece dois modos principais de operação: o modo de posicionamento, em que o motor se desloca até uma posição alvo com perfis de aceleração e desaceleração configuráveis, e o modo de velocidade instantânea (\texttt{runSpeed}), em que o motor corre continuamente à velocidade definida por \texttt{setSpeed()}, sem qualquer rampa de aceleração ou desaceleração.
+A biblioteca AccelStepper~\cite{AccelStepper}, desenvolvida por Mike McCauley e usada no ecossistema Arduino, oferece dois modos de operação: o modo de posicionamento, em que o motor se move até uma posição alvo com perfis de aceleração configuráveis, e o modo de velocidade instantânea (\texttt{runSpeed}), em que o motor corre continuamente à velocidade definida por \texttt{setSpeed()}, sem rampa de aceleração ou desaceleração.
 
-Para o presente projeto, é utilizado exclusivamente o modo \texttt{runSpeed}. Esta escolha é fundamentada pelo facto de os dados sísmicos, após conversão, já codificarem implicitamente a variação de velocidade entre janelas consecutivas. A velocidade de cada janela — calculada como o número de passos a realizar dividido pela duração da janela (0,02\,s) — varia de janela para janela, e esta variação constitui precisamente a aceleração da plataforma. Adicionar uma rampa de aceleração extra, como a que o modo de posicionamento imporia, distorceria o perfil sísmico reproduzido, introduzindo atrasos artificiais nas transições de velocidade.
-
-O Código~\ref{lbl:accelstepper-init} ilustra a inicialização dos quatro motores com a biblioteca AccelStepper, especificando os pinos STEP e DIR de cada motor conforme o mapeamento da Tabela~\ref{tab:mapeamento-pinos}.
-
-\begin{listing}[h]
-\begin{minted}{cpp}
-#include <AccelStepper.h>
-
-// Motores: modo DRIVER (pinos STEP e DIR)
-AccelStepper motorN(AccelStepper::DRIVER, 4,  25);
-AccelStepper motorE(AccelStepper::DRIVER, 26, 27);
-AccelStepper motorS(AccelStepper::DRIVER, 14, 12);
-AccelStepper motorW(AccelStepper::DRIVER, 32, 33);
-
-const int PIN_EN = 13;
-
-void setup() {
-    Serial.begin(115200);
-    pinMode(PIN_EN, OUTPUT);
-    digitalWrite(PIN_EN, LOW); // Ativar drivers (EN ativo a LOW)
-
-    // Definir velocidade maxima admissivel por motor
-    motorN.setMaxSpeed(50000);
-    motorE.setMaxSpeed(50000);
-    motorS.setMaxSpeed(50000);
-    motorW.setMaxSpeed(50000);
-}
-\end{minted}
-\caption{Inicialização dos quatro motores AccelStepper com os pinos correspondentes.}
-\label{lbl:accelstepper-init}
-\end{listing}
+Para o presente projeto, usa-se exclusivamente o modo \texttt{runSpeed}, porque os dados sísmicos, após conversão, já codificam implicitamente a variação de velocidade entre janelas consecutivas. A velocidade de cada janela, calculada como o número de passos a realizar dividido pela duração da janela (0,02\,s), varia de janela para janela, e essa variação é precisamente a aceleração da plataforma. Adicionar uma rampa de aceleração extra, como a que o modo de posicionamento imporia, distorceria o perfil sísmico reproduzido e introduziria atrasos artificiais nas transições de velocidade.
 
 
 \subsection{Controlo Síncrono dos 4 Motores a 20\,ms por Janela}
 \label{subsec:controlo-sincrono}
 
-O controlo síncrono dos quatro motores é implementado no ciclo principal (\texttt{loop()}) do firmware, através de um mecanismo de temporização baseado na função \texttt{millis()} do ESP32, que retorna o tempo decorrido desde o arranque do microcontrolador em milissegundos. A cada iteração do ciclo principal, o firmware verifica se decorreram pelo menos 20\,ms desde a última atualização. Quando esta condição se verifica, é avançado o índice de posição nos arrays sísmicos, são calculadas as velocidades instantâneas dos quatro motores para a janela atual e são chamadas as funções \texttt{setSpeed()} de cada motor. Fora do bloco de temporização, a função \texttt{runSpeed()} de cada motor é chamada continuamente, garantindo que os passos pendentes são executados com o mínimo de \textit{jitter} possível.
+O controlo síncrono dos quatro motores é implementado no ciclo principal (\texttt{loop()}) do firmware, por um mecanismo de temporização baseado na função \texttt{millis()} do ESP32, que devolve o tempo decorrido desde o arranque do microcontrolador em milissegundos. A cada iteração, o firmware verifica se decorreram pelo menos 20\,ms desde a última atualização. Quando tal acontece, avança o índice nos arrays sísmicos, calcula as velocidades instantâneas dos quatro motores para a janela atual e chama \texttt{setSpeed()} em cada motor. Fora do bloco de temporização, \texttt{runSpeed()} é chamado continuamente em cada motor, para que os passos pendentes sejam executados com o mínimo de \textit{jitter} possível.
 
 O Código~\ref{lbl:controlo-sincrono} apresenta a estrutura do ciclo principal do firmware, incluindo a atualização de velocidade, a emissão de telemetria série e a execução contínua dos passos.
 
@@ -220,30 +190,10 @@ void loop() {
 \label{lbl:controlo-sincrono}
 \end{listing}
 
-A separação entre o bloco de atualização de velocidade (a 50\,Hz) e as chamadas a \texttt{runSpeed()} (em cada iteração do ciclo) é uma decisão de design crítica. A função \texttt{runSpeed()} só executa um passo quando o tempo decorrido desde o último passo é suficiente para a velocidade configurada. Se fosse chamada apenas a cada 20\,ms, a resolução temporal de cada passo seria de 20\,ms, o que, para velocidades elevadas que requerem múltiplos passos por janela, implicaria a execução de vários passos em simultâneo — fisicamente impossível para um motor de passo. A chamada contínua garante que os passos são distribuídos de forma aproximadamente uniforme ao longo de cada janela de 20\,ms, suavizando o perfil de velocidade executado.
+A separação entre o bloco de atualização de velocidade (a 50\,Hz) e as chamadas a \texttt{runSpeed()} (em cada iteração do ciclo) tem implicações diretas na qualidade do movimento. A função \texttt{runSpeed()} só executa um passo quando o tempo decorrido desde o último passo é suficiente para a velocidade configurada. Se fosse chamada apenas a cada 20\,ms, a resolução temporal de cada passo seria de 20\,ms, o que, para velocidades elevadas que requerem múltiplos passos por janela, implicaria a execução de vários passos em simultâneo, fisicamente impossível para um motor de passo. A chamada contínua garante que os passos se distribuem de forma aproximadamente uniforme ao longo de cada janela de 20\,ms, o que suaviza o perfil de velocidade executado.
 
 
 \subsection{Telemetria Série}
 \label{subsec:telemetria}
 
-O sistema emite, a cada janela de 20\,ms, uma linha de dados via porta série (UART0 do ESP32, acessível através da ligação USB), à taxa de 115\,200\,baud. O formato de saída é CSV (\textit{Comma-Separated Values}), com os seguintes cinco campos separados por vírgulas:
-
-\begin{itemize}
-    \item Tempo da janela atual em segundos (3 casas decimais, calculado como \texttt{indiceAtual} $\times$ 0,02);
-    \item Velocidade instantânea do motor N em passos por segundo (1 casa decimal);
-    \item Velocidade instantânea do motor E em passos por segundo;
-    \item Velocidade instantânea do motor S em passos por segundo;
-    \item Velocidade instantânea do motor W em passos por segundo.
-\end{itemize}
-
-Este formato é diretamente compatível com o Serial Plotter integrado no Arduino IDE, permitindo a visualização gráfica em tempo real dos perfis de velocidade dos quatro motores durante a reprodução do sismo. Os dados podem igualmente ser capturados por um terminal série (ex: PuTTY, CoolTerm) e exportados para ficheiros CSV, para análise posterior em Python ou Excel, possibilitando a comparação entre o perfil de velocidade efetivamente executado e o perfil teórico calculado a partir dos dados originais de El Centro.
-
-
-\subsection{Operação}
-\label{subsec:operacao}
-
-O sistema opera sobre o seguinte modo:
-
-\begin{itemize}
-    \item \textbf{Simulação Sismo Real:} O sistema percorre sequencialmente os arrays \texttt{sismo\_N}, \texttt{sismo\_E}, \texttt{sismo\_S} e \texttt{sismo\_W}, reproduzindo o perfil de deslocamento do registo sísmico de El Centro de 1940. O número de amostras percorridas é limitado pelo menor dos dois arrays (2673 pontos EW), garantindo a sincronização entre os dois eixos ao longo de toda a sequência. Este é o modo principal do sistema e o único completamente validado na versão atual.
-\end{itemize}
+O sistema emite, a cada janela de 20\,ms, uma linha CSV via porta série (UART0 do ESP32, 115\,200\,baud) com cinco campos: tempo (s), e as velocidades instantâneas dos motores N, E, S e W em steps/s. Este formato é compatível com o Serial Plotter do Arduino IDE para monitorização em tempo real e pode ser capturado para análise posterior em Python ou Excel.

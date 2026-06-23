@@ -1,45 +1,54 @@
 
 
-\chapter{Arquitetura do Sistema}
+\chapter{Requisitos e Arquitetura do Sistema}
 \label{chapter:architecture}
 
 \begin{introduction}
-Este capítulo apresenta a visão geral da arquitetura do sistema, descrevendo os subsistemas mecânico, elétrico e de software que o compõem.
+Este capítulo define os requisitos que guiaram o desenvolvimento e apresenta a arquitetura geral do sistema, descrevendo como os três subsistemas --- mecânico, elétrico e de software --- se articulam para cumprir esses requisitos.
 \end{introduction}
 
+\section{Requisitos do Sistema}
+\label{sec:requisitos}
 
+Os requisitos foram definidos a partir das necessidades concretas do utilizador final e das restrições técnicas impostas pelos componentes selecionados.
+
+\textbf{Requisitos funcionais:}
+\begin{itemize}
+    \item \textbf{RF1 --- Movimento bi-axial:} A plataforma deve mover-se de forma controlada em dois eixos horizontais independentes (X e Y).
+    \item \textbf{RF2 --- Reprodução de sismo real:} O registo de El~Centro de 1940 (componentes NS e EW) deve ser reproduzível a partir de dados de deslocamento pré-processados e codificados no firmware.
+    \item \textbf{RF5 --- Frequência de atualização de 50\,Hz:} As velocidades dos motores devem ser atualizadas a 50\,Hz (passo de 20\,ms).
+    \item \textbf{RF7 --- Suporte de modelos de teste:} A plataforma deve ter dimensões e resistência suficientes para receber modelos reduzidos de estruturas.
+\end{itemize}
+
+\textbf{Requisitos não funcionais e restrições de design:}
+\begin{itemize}
+    \item \textbf{RNF1 --- Custo:} Custo total inferior a 500\,\euro{}.
+    \item \textbf{RNF2 --- Reprodutibilidade:} Todos os ficheiros de design 3D, firmware e scripts devem estar publicamente disponíveis.
+    \item \textbf{RNF3 --- Segurança:} Fins de curso devem limitar o deslocamento máximo da plataforma.
+    \item \textbf{RNF4/RD1/RD2 --- Acessibilidade técnica:} Montagem realizável com conhecimentos básicos; estrutura fabricada exclusivamente por impressão 3D; componentes disponíveis em fornecedores genéricos (NEMA17, DRV8825, ESP32, CNC Shield, fusos TR8).
+    \item \textbf{RD5 --- Linguagens open-source:} Firmware em C++/Arduino; pré-processamento em Python.
+\end{itemize}
 
 \section{Visão Geral da Arquitetura}
 \label{sec:visao-geral}
 
-O sistema divide-se em três subsistemas interligados. O subsistema mecânico trata da movimentação física da plataforma; o subsistema elétrico e eletrónico controla os atuadores e gere a energia; o subsistema de software e firmware abarca o pré-processamento dos dados sísmicos e a lógica de controlo em tempo real.
-
+O sistema divide-se em três subsistemas interligados: o mecânico converte o movimento dos motores em deslocamento linear da plataforma; o elétrico controla os atuadores e distribui a energia; o software trata do pré-processamento dos dados sísmicos e executa a lógica de controlo em tempo real.
 
 \section{Subsistema Mecânico}
 \label{sec:subsistema-mecanico}
 
-O subsistema mecânico é responsável por converter o movimento rotativo dos motores em deslocamento linear controlado da plataforma, em dois eixos horizontais ortogonais. A estrutura é composta por dois elementos principais: uma base fixa, fabricada por impressão 3D, que suporta os quatro motores e serve de fundação rígida do sistema; e uma plataforma móvel única, também impressa em 3D, sobre a qual são colocados os modelos estruturais a ensaiar.
+O subsistema mecânico converte o movimento rotativo dos motores em deslocamento linear controlado da plataforma, em dois eixos horizontais ortogonais. A estrutura é composta por uma base fixa (fabricada por impressão 3D), que suporta os quatro motores, e uma plataforma móvel única (também impressa em 3D), sobre a qual são colocados os modelos estruturais a ensaiar.
 
-A ligação entre a base e a plataforma é assegurada por quatro colunas de suporte, dotadas de rótulas nas duas extremidades (topo e base). Esta configuração é o elemento central do design bi-axial: ao contrário de soluções com guias lineares rígidas por eixo, as rótulas permitem que as colunas se inclinem livremente em qualquer direção, acomodando o movimento simultâneo da plataforma nos eixos~X e Y sem introduzir constrangimentos cinemáticos entre eles.
+Quatro colunas de suporte, dotadas de rótulas nas duas extremidades, ligam a base à plataforma. São essas rótulas que viabilizam o design bi-axial: ao contrário de soluções com guias lineares rígidas por eixo, permitem que as colunas se inclinem livremente em qualquer direção, pelo que a plataforma se desloca simultaneamente nos eixos~X e Y sem constrangimentos cinemáticos entre eles.
 
-Cada motor está posicionado próximo do centro da base, orientado radialmente para o exterior (posições N, S, E e W), e acoplado a um fuso trapezoidal com \textit{lead} de 8\,mm por revolução. Em cada extremidade da plataforma está fixada uma porca trapezoidal correspondente: quando o motor roda, o fuso avança ou recua na porca, empurrando ou puxando a plataforma nessa direção. Os motores N e S controlam o eixo~Y (componente Norte-Sul do sismo), rodando em sentidos opostos de modo a que ambos apliquem força na mesma direção sobre a plataforma. O mesmo princípio aplica-se aos motores E e W para o eixo~X (componente Este-Oeste). Os quatro motores funcionam em simultâneo, pelo que o movimento bi-axial resulta da composição vetorial das forças aplicadas pelos dois pares de motores em cada instante.
-
+Cada motor está posicionado próximo do centro da base, orientado radialmente para o exterior (posições N, S, E e W), e acoplado a um fuso trapezoidal com \textit{lead} de 8\,mm por revolução. Em cada extremidade da plataforma está fixada uma porca trapezoidal: quando o motor roda, o fuso avança ou recua na porca, empurrando ou puxando a plataforma. Os motores N e S controlam o eixo~Y (NS) e os motores E e W o eixo~X (EW), rodando em pares em sentidos opostos para que ambos apliquem força na mesma direção. O movimento bi-axial resulta da composição vetorial das forças dos dois pares em cada instante.
 
 \section{Subsistema Elétrico e Eletrónico}
 \label{sec:subsistema-eletrico}
 
-O subsistema elétrico e eletrónico centraliza-se no microcontrolador ESP32, que funciona como unidade central de controlo e processamento. A CNC Shield, encaixada diretamente sobre o ESP32, providencia a interface física e elétrica entre o microcontrolador e os quatro \textit{drivers} DRV8825, um por motor. Esta arquitetura modular reduz a complexidade da cablagem e facilita a substituição de componentes em caso de avaria.
-
-A alimentação do sistema é bipartida: o ESP32 é alimentado pela porta USB durante o desenvolvimento e operação normal, enquanto os motores recebem energia de uma fonte DC externa dedicada, com tensão e corrente adequadas aos motores NEMA17 utilizados. Separar eletricamente o domínio lógico (ESP32 e lógica dos \textit{drivers}) do domínio de potência (enrolamentos dos motores) evita perturbações nos sinais de controlo que poderiam causar comportamentos erráticos no firmware.
-
-O pino Enable (EN) dos \textit{drivers}, partilhado entre todos os quatro \textit{drivers} através da CNC Shield e ligado ao pino 13 do ESP32, é ativado (nível lógico baixo) antes do início de cada sequência de movimento e desativado (nível lógico alto) no final, permitindo o arrefecimento dos motores e a redução do consumo energético durante os períodos de inatividade.
-
+O ESP32 é a unidade central de controlo. A CNC Shield~\cite{JoyITCNCKit2}, ligada ao ESP32 por fios individuais, providencia a interface para os quatro \textit{drivers} DRV8825, um por motor. A alimentação é bipartida: o ESP32 é alimentado pela porta USB; os motores recebem energia de uma fonte DC externa dedicada de 12\,V. Separar eletricamente o domínio lógico do domínio de potência evita perturbações nos sinais de controlo. O pino Enable (EN, pino 13) é partilhado entre todos os \textit{drivers}: LOW ativa-os; HIGH desativa-os e reduz o consumo em inatividade.
 
 \section{Subsistema de Software e Firmware}
 \label{sec:subsistema-software}
 
-O subsistema de software e firmware divide-se em dois componentes com ciclos de vida distintos. O script de pré-processamento em Python opera em modo \textit{offline}, executado uma única vez na fase de preparação do sistema, e converte os dados sísmicos de deslocamento em arrays de velocidades de motor, prontos a ser embebidos no firmware. O firmware em C++ para o ESP32, por outro lado, corre em tempo real durante os ensaios, percorrendo os arrays pré-calculados e controlando os motores a uma cadência de 50\,Hz.
-
-A biblioteca AccelStepper é utilizada no firmware para o controlo de velocidade instantânea dos motores, em modo \texttt{runSpeed()}, que aplica a velocidade definida sem qualquer rampa de aceleração ou desaceleração. Esta escolha justifica-se porque os dados sísmicos codificam implicitamente a variação de velocidade entre janelas consecutivas, pelo que qualquer aceleração adicional imposta pela biblioteca seria redundante e potencialmente distorciva do perfil sísmico real.
-
-A comunicação série, à taxa de 115\,200\,baud, serve como canal de telemetria, permitindo a monitorização em tempo real das velocidades instantâneas dos quatro motores durante a execução de uma sequência sísmica. O formato de saída CSV possibilita a captura e análise posterior dos dados com ferramentas como Python ou Excel.
+O subsistema divide-se em dois componentes. O script Python opera em modo \textit{offline}: executado uma única vez, converte os dados sísmicos de deslocamento em arrays de velocidades de motor a embutir no firmware. O firmware em C++ para o ESP32 corre em tempo real, percorre os arrays a 50\,Hz e controla os motores com a biblioteca AccelStepper~\cite{AccelStepper} em modo \texttt{runSpeed()}, sem rampa de aceleração, porque os dados sísmicos já codificam implicitamente as variações de velocidade.
