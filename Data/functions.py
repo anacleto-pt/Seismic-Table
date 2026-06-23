@@ -20,10 +20,10 @@ def steps_calc(data1, data2, adjustment, microstepping, lead = 8, step_angle = 1
     steps_S = []
     steps_W = []
     for i in range(1, len(data1.displacement)):
-        steps_N.append(int(adjustment * (((data1.displacement[i] - data1.displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping)))
+        steps_N.append(round(adjustment * (((data1.displacement[i] - data1.displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping)))
         steps_S.append(steps_N[-1] * -1)
     for i in range(1, len(data2.displacement)):
-        steps_E.append(int(adjustment * (((data2.displacement[i] - data2.displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping)))
+        steps_E.append(round(adjustment * (((data2.displacement[i] - data2.displacement[i - 1]) * 1000 / lead) * steps_per_revolution * microstepping)))
         steps_W.append(steps_E[-1] * -1)
     return steps_N, steps_E, steps_S, steps_W
 
