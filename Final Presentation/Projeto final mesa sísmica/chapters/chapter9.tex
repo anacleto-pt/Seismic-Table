@@ -1,0 +1,61 @@
+\chapter{Conclusões e Trabalho Futuro}
+\label{chapter:conclusions}
+
+\begin{introduction}
+Os objetivos iniciais eram claros; este capítulo avalia em que medida foram cumpridos, expõe as limitações identificadas no decurso do desenvolvimento e indica as direções mais promissoras para trabalho futuro.
+\end{introduction}
+
+\section{Conclusões}
+\label{sec:conclusoes}
+
+O projeto desenvolveu uma mesa sísmica bi-axial de baixo custo ({\raise.17ex\hbox{$\scriptstyle\sim$}}181\,\euro{}) com estrutura impressa em 3D, controlada por ESP32, com interface web embarcada que permite configurar e executar movimentos sinusoidais bi-axiais de frequência variável sem necessidade de computador externo durante o ensaio. O modo de frequência variável foi validado experimentalmente: a plataforma executa movimento elíptico nos dois eixos com parâmetros configuráveis em tempo real via browser, e o ensaio circular com sismógrafo de smartphone confirmou acelerações de ordem de grandeza comparável a um sismo de baixa intensidade.
+
+O objetivo inicial de reproduzir fielmente o registo sísmico de El Centro à escala temporal real não foi alcançado. A mesa é mecanicamente incapaz de acompanhar o perfil de velocidades exigido pelo sismo: os motores NEMA17 perdem passo nos picos de velocidade, o atrito elevado das rótulas em PLA acrescenta resistência não desprezável, e a operação em malha aberta impede qualquer correção. As estratégias de mitigação tentadas --- fator de ajuste, \textit{clamping} e \textit{subsampling} --- permitem executar o perfil sem perda de passo, mas comprometem o conteúdo em frequência, a amplitude ou a escala temporal do sismo, tornando o ensaio sísmico inválido do ponto de vista da engenharia sísmica. Um sismo reproduzido em câmara lenta, com amplitude reduzida a décimos de milímetro, não é útil para avaliar a resposta estrutural de modelos reduzidos.
+
+Ainda assim, o projeto demonstra a viabilidade técnica de construir, por menos de 200\,\euro{}, uma mesa bi-axial com firmware de controlo e interface web, usando exclusivamente componentes genéricos e impressão 3D. A combinação ESP32~\cite{JoyITESP32} + CNC Shield~\cite{JoyITCNCKit2} + quatro drivers DRV8825 + quatro motores NEMA17-04~\cite{JoyITNEMA17} revelou-se adequada para o controlo síncrono de quatro motores em simultâneo, e a arquitetura de rótulas para movimento bi-axial mostrou-se funcionalmente correta. O protótipo constitui uma base de desenvolvimento sobre a qual melhorias incrementais --- em torque, atrito e malha de controlo --- podem aproximar o sistema de reprodução sísmica fiel, a um custo ainda acessível.
+
+% TODO: (Opcional) Inserir foto final do protótipo em funcionamento com um modelo estrutural sobre a plataforma.
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=0.7\textwidth]{figs/prototipo_funcionamento.jpg}
+ \caption{Protótipo da mesa sísmica em funcionamento com modelo estrutural.}
+ \label{fig:prototipo-final}
+\end{figure}
+
+
+\section{Limitações Identificadas}
+\label{sec:limitacoes}
+
+O protótipo apresenta um conjunto de limitações, ordenadas por impacto no objetivo central do projeto.
+
+\begin{itemize}
+    \item \textbf{Incapacidade de reprodução sísmica fiel à escala real:} Esta é a principal limitação do protótipo. O sistema foi concebido para reproduzir o sismo de El Centro, mas os motores NEMA17, combinados com o atrito das rótulas em PLA e a operação em malha aberta, são insuficientes para acompanhar os picos de velocidade do perfil sísmico à frequência de amostragem de 50\,Hz. Todas as estratégias de adaptação do sinal (fator de ajuste, \textit{clamping}, \textit{subsampling}) resolvem o problema de perda de passo mas destroem o carácter sísmico do ensaio. A resolução definitiva deste problema exige hardware mais capaz (ver Trabalho Futuro).
+
+    \item \textbf{Controlo em malha aberta:} A ausência de encoders ou sensores de posição nos motores impede a deteção e correção de erros de passo. Se um motor perder passos por excesso de carga ou velocidade, o erro acumula-se silenciosamente e o movimento da plataforma diverge do perfil sísmico pretendido sem que o sistema o detete.
+
+    \item \textbf{Margem de torque reduzida:} O torque estimado necessário por motor (5,6\,kg.cm) excede o torque de retenção nominal do NEMA17-04 (4,4\,kg.cm) com massas de modelo próximas do limite máximo. Recomenda-se não exceder 1\,kg de massa do modelo de teste, de modo a evitar perda de passo no modo de frequência variável.
+
+    \item \textbf{Resolução temporal do \texttt{millis()}:} A função \texttt{millis()} tem resolução de 1\,ms, o que introduz um \textit{jitter} de temporização de até $\pm$1\,ms por janela de 20\,ms (5\% do período). Ao longo de uma sequência sísmica completa, este erro pode causar uma ligeira deriva temporal entre o perfil executado e o perfil teórico.
+
+    \item \textbf{Ausência de fins de curso:} A CNC Shield disponibiliza seis entradas para \textit{endstops}, mas estas não foram integradas na versão atual do firmware. Sem fins de curso, um erro nos dados ou no firmware pode levar a plataforma até ao limite físico de deslocamento, com risco de dano mecânico.
+
+    \item \textbf{Rigidez estrutural limitada:} A estrutura em PLA apresenta menor rigidez e resistência térmica comparativamente a soluções em alumínio maquinado. As tolerâncias dimensionais das peças impressas em 3D afetam a precisão do alinhamento dos fusos, o que pode introduzir folgas e vibração residual na plataforma.
+\end{itemize}
+
+
+\section{Propostas de Melhoria e Trabalho Futuro}
+\label{sec:trabalho-futuro}
+
+As propostas são ordenadas por prioridade de impacto no objetivo de reprodução sísmica fiel.
+
+\begin{itemize}
+    \item \textbf{Motores com maior torque (NEMA23) e alimentação a 24\,V:} Prioridade máxima para viabilizar reprodução sísmica real. Motores NEMA23 têm torque típico de 10--15\,kg.cm, mais do que o dobro do NEMA17-04, o que aumenta a margem de segurança nas transições de velocidade do perfil sísmico. A transição para 24\,V de alimentação dos motores (suportada pelos drivers DRV8825 sem substituição de qualquer componente eletrónico, dado que suportam até 45\,V) melhora o torque dinâmico a alta velocidade: com o dobro da tensão, a corrente nos enrolamentos atinge mais rapidamente o valor nominal a cada passo ($dI/dt \propto V/L$), preservando o torque útil a frequências de passo mais elevadas e reduzindo a degradação da curva torque-velocidade.
+
+    \item \textbf{Substituição das rótulas por rolamentos ou guias lineares:} A redução do atrito é condição necessária para reprodução sísmica fiel. Guias lineares tipo MGN12 (custo aproximado de 15--25\,\euro{} por unidade) eliminariam o atrito de deslizamento das rótulas em PLA e confeririam ao sistema rigidez direcional que as rótulas não oferecem. Esta alteração implica uma redesenhada parcial da base e da plataforma, mas é compatível com a manutenção dos restantes componentes.
+
+    \item \textbf{Controlo em malha fechada com encoders e fins de curso:} A adição de encoders incrementais nos veios dos motores permitiria detetar e corrigir perdas de passo em tempo real. Em paralelo, a integração dos micro-interruptores nas entradas de \textit{endstop} já disponíveis na CNC Shield eliminaria o risco de colisão destrutiva e permitiria uma rotina de \textit{homing} no arranque.
+
+    \item \textbf{Suporte a registos sísmicos genéricos via microSD ou Wi-Fi:} Substituir os arrays estáticos de El~Centro por um mecanismo de carregamento dinâmico de registos em formato CSV (via microSD ou Wi-Fi), tornando o sistema compatível com qualquer registo da base de dados PEER~\cite{PEERDatabase}.
+
+    \item \textbf{Substituição de PLA por PETG ou ABS nas peças estruturais:} O PLA apresenta baixa resistência ao impacto, temperatura de deflexão térmica reduzida ($\approx$60\,\textdegree{}C) e tendência para fraturar de forma frágil sob cargas repetidas. O PETG oferece melhor resistência ao impacto e tenacidade superior, com temperatura de deflexão mais elevada e facilidade de impressão comparável ao PLA. A substituição nas peças estruturais mais solicitadas (suportes dos motores e blocos de fixação das porcas) melhoraria a durabilidade do protótipo sem aumento substancial de custo ou complexidade de fabrico.
+\end{itemize}

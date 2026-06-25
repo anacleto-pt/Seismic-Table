@@ -52,8 +52,8 @@ Acoplamento flexível motor--fuso (pack de 5, utilizados 4)~\cite{AcopladorAmazo
 \hline
 \multicolumn{5}{l}{\textit{Fabricação}} \\
 \hline
-Filamento PLA 1,75\,mm (1\,kg utilizado)
-  & --- & 1\,kg & 35,00/kg & 35,00 \\
+Filamento PLA 1,75\,mm
+  & Polymaker & $\sim$1\,kg & 35,00/kg & $\sim$35,00 \\
 \hline
 \textbf{TOTAL} & & & & \textbf{$\approx$180,59} \\
 \hline
@@ -62,8 +62,7 @@ Filamento PLA 1,75\,mm (1\,kg utilizado)
 \end{tabular}
 \end{table}
 
-O custo total do protótipo situa-se em aproximadamente 181\,\euro{}, valor que inclui todos os componentes eletrónicos, mecânicos e de cablagem adquiridos especificamente para este projeto. Fica bem abaixo do limite de 500\,\euro{} estabelecido como requisito não funcional (RNF1, Capítulo~\ref{chapter:requirements}), com uma margem de quase 3:1 face ao teto definido. Este custo reflete uma única unidade construída sem otimização de fornecimento; em produções de maior escala ou com acesso a fornecedores em volume, o custo unitário seria consideravelmente mais baixo.
-
+O custo total do protótipo situa-se em aproximadamente 181\,\euro{}, valor que inclui todos os componentes eletrónicos, mecânicos e de cablagem adquiridos especificamente para este projeto. Fica bem abaixo do limite de 500\,\euro{} estabelecido como requisito não funcional (RNF1, Capítulo~\ref{chapter:architecture}), com uma margem de quase 3:1 face ao teto definido.
 \section{Comparação com Soluções Comerciais}
 \label{sec:comparacao-comercial}
 
@@ -79,13 +78,23 @@ A Tabela~\ref{tab:comparacao-custos} apresenta uma comparação direta entre o p
 \hline
 Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY} & $>$10\,000\,\euro{} & 2 & Sim & Não \\
 Quanser Shake Table III XY~\cite{QuanserShakeTableIII} & $>>$10\,000\,\euro{} & 2 & Sim & Não \\
-SARSAR~\cite{Damci2018}                                & 770--1\,800\,USD   & 1 & Sim & Não \\
+SARSAR~\cite{Damci2018}                                & 770\,USD   & 1 & Sim & Não \\
 Shakebot~\cite{Shakebot2022}                           & 1\,300\,USD        & 1 & Sim & Parcial \\
 Mesa 2-DOF~\cite{2DOF2025}                             & $\sim$2\,500\,USD* & 2 & Sim & Não \\
-\textbf{Este projeto}                                  & \textbf{$\approx$181\,\euro{}} & \textbf{2} & \textbf{Sim} & \textbf{Sim} \\
+\textbf{Este projeto}                                  & \textbf{$\approx$181\,\euro{}} & \textbf{2} & \textbf{Não$^\dagger$} & \textbf{Sim} \\
 \hline
 \multicolumn{5}{l}{\footnotesize * Custo estimado incluindo componente já existente em laboratório, avaliado em 1\,000\,USD.} \\
+\multicolumn{5}{l}{\footnotesize $^\dagger$ O pipeline sísmico foi implementado mas a mesa é mecanicamente incapaz de reproduzir sismos reais} \\
+\multicolumn{5}{l}{\footnotesize \phantom{$^\dagger$} à escala temporal real (ver Capítulo~\ref{chapter:validation}).} \\
 \end{tabular}
 \end{table}
+
+% TODO: Inserir gráfico de barras comparando o custo do protótipo (~181€) com as outras soluções.
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=0.75\textwidth]{figs/comparacao_custos.png}
+ \caption{Comparação de custo entre o protótipo desenvolvido e soluções de mesas sísmicas existentes.}
+ \label{fig:custos}
+\end{figure}
 
 Da análise da tabela ressaltam três aspetos diferenciadores do presente projeto. Primeiro, é a única solução identificada que combina simultaneamente as características de ser bi-axial, de custo reduzido e construída com impressão 3D. Segundo, o rácio de custo face à solução comercial bi-axial mais próxima (a Quanser Shake Table II XY~\cite{QuanserShakeTableIIXY}) é superior a 65:1, ou seja, o presente protótipo custou menos de 1,9\% do valor estimado para a solução comercial equivalente. Terceiro, mesmo confrontado com projetos académicos bi-axiais como a mesa 2-DOF~\cite{2DOF2025}, o protótipo apresenta um custo total inferior e é o único a recorrer à impressão 3D como tecnologia de fabrico estrutural.
