@@ -4,7 +4,7 @@
 \label{chapter:architecture}
 
 \begin{introduction}
-Este capítulo define os requisitos que guiaram o desenvolvimento e apresenta a arquitetura geral do sistema, descrevendo como os três subsistemas --- mecânico, elétrico e de software --- se articulam para cumprir esses requisitos.
+Este capítulo define os requisitos que guiaram o desenvolvimento e apresenta a arquitetura geral do sistema, descrevendo como os três subsistemas - mecânico, elétrico e de software - se articulam para cumprir esses requisitos.
 \end{introduction}
 
 \section{Requisitos do Sistema}
@@ -14,17 +14,17 @@ Os requisitos foram definidos a partir das necessidades concretas do utilizador 
 
 \textbf{Requisitos funcionais:}
 \begin{itemize}
-    \item \textbf{RF1 --- Movimento bi-axial:} A plataforma deve mover-se de forma controlada em dois eixos horizontais independentes (X e Y).
-    \item \textbf{RF2 --- Movimento oscilatório de frequência variável:} A plataforma deve executar movimentos sinusoidais nos dois eixos com frequência, amplitude e duração configuráveis em tempo real.
-    \item \textbf{RF-Web --- Interface Web embarcada:} Os parâmetros de movimento devem ser configuráveis remotamente via interface web servida pelo próprio ESP32 em modo Access Point (SSID: \texttt{MesaSismica}, IP: \texttt{192.168.4.1}), sem necessidade de ligação USB ou computador externo durante o ensaio.
-    \item \textbf{RF4 --- Suporte de modelos de teste:} A plataforma deve ter dimensões e resistência suficientes para receber modelos reduzidos de estruturas.
+    \item \textbf{RF1 - Movimento bi-axial:} A plataforma deve mover-se de forma controlada em dois eixos horizontais independentes (X e Y).
+    \item \textbf{RF2 - Movimento oscilatório de frequência variável:} A plataforma deve executar movimentos sinusoidais nos dois eixos com frequência, amplitude e duração configuráveis em tempo real.
+    \item \textbf{RF-Web - Interface Web embarcada:} Os parâmetros de movimento devem ser configuráveis remotamente via interface web servida pelo próprio ESP32 em modo Access Point (SSID: \texttt{MesaSismica}, IP: \texttt{192.168.4.1}), sem necessidade de ligação USB ou computador externo durante o ensaio.
+    \item \textbf{RF4 - Suporte de modelos de teste:} A plataforma deve ter dimensões e resistência suficientes para receber modelos reduzidos de estruturas.
 \end{itemize}
 
 \textbf{Requisitos não funcionais:}
 \begin{itemize}
-    \item \textbf{RNF1 --- Custo:} Custo total inferior a 500\,\euro{}.
-    \item \textbf{RNF2 --- Reprodutibilidade:} Todos os ficheiros de design 3D, firmware e scripts devem estar publicamente disponíveis.
-    \item \textbf{RNF3 --- Acessibilidade técnica:} Montagem realizável com conhecimentos básicos; estrutura fabricada exclusivamente por impressão 3D; componentes disponíveis em fornecedores genéricos (NEMA17, DRV8825, ESP32, CNC Shield, fusos TR8).
+    \item \textbf{RNF1 - Custo:} Custo total inferior a 500\,\euro{}.
+    \item \textbf{RNF2 - Reprodutibilidade:} Todos os ficheiros de design 3D, firmware e scripts devem estar publicamente disponíveis.
+    \item \textbf{RNF3 - Acessibilidade técnica:} Montagem realizável com conhecimentos básicos; estrutura fabricada exclusivamente por impressão 3D; componentes disponíveis em fornecedores genéricos (NEMA17, DRV8825, ESP32, CNC Shield, fusos TR8).
 \end{itemize}
 
 \section{Visão Geral da Arquitetura}
@@ -35,7 +35,7 @@ O sistema divide-se em três subsistemas interligados: o mecânico converte o mo
 \section{Subsistema Mecânico}
 \label{sec:subsistema-mecanico}
 
-O subsistema mecânico converte o movimento rotativo dos motores em deslocamento linear controlado da plataforma, em dois eixos horizontais ortogonais. A estrutura é composta por uma base fixa (fabricada por impressão 3D) e uma plataforma móvel única (também impressa em 3D), sobre a qual são colocados os modelos estruturais a ensaiar e na qual estão fixos os quatro motores.
+O subsistema mecânico converte o movimento rotativo dos motores em deslocamento linear controlado da plataforma, em dois eixos horizontais ortogonais. A estrutura é composta por uma base fixa (fabricada por impressão 3D) e uma plataforma móvel única (também impressa em 3D), sobre a qual são colocados os modelos estruturais a ensaiar e estão fixos os quatro motores.
 
 Quatro colunas de suporte, dotadas de rótulas nas duas extremidades, ligam a base à plataforma. São essas rótulas que viabilizam o design bi-axial: ao contrário de soluções com guias lineares rígidas por eixo, permitem que as colunas se inclinem livremente em qualquer direção, pelo que a plataforma se desloca simultaneamente nos eixos~X e Y sem constrangimentos entre eles.
 
@@ -47,4 +47,4 @@ O ESP32 é a unidade central de controlo. A CNC Shield~\cite{JoyITCNCKit2}, liga
 \section{Subsistema de Software e Firmware}
 \label{sec:subsistema-software}
 
-O subsistema divide-se em dois componentes. O script Python opera em modo \textit{offline} e converte dados sísmicos em arrays de passos --- foi desenvolvido para validação do pipeline e análise das limitações mecânicas (ver Capítulo~\ref{chapter:validation}), mas não constitui o modo de operação da mesa. O firmware em C++ para o ESP32 implementa o modo de operação principal: movimento sinusoidal bi-axial com parâmetros configuráveis em tempo real via interface web, usando a biblioteca AccelStepper~\cite{AccelStepper} em modo \texttt{runSpeed()}.
+O subsistema divide-se em dois componentes. O script Python opera em modo \textit{offline} e converte dados sísmicos em arrays de passos - foi desenvolvido para validação do pipeline e análise das limitações mecânicas (ver Capítulo~\ref{chapter:validation}), mas não constitui o modo de operação da mesa. O firmware em C++ para o ESP32 implementa o modo de operação principal: movimento sinusoidal bi-axial com parâmetros configuráveis em tempo real via interface web, usando a biblioteca AccelStepper~\cite{AccelStepper} em modo \texttt{runSpeed()}.

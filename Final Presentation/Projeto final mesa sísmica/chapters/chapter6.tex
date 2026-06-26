@@ -2,7 +2,7 @@
 \label{chapter:software}
 
 \begin{introduction}
-Este capítulo descreve o software e o firmware desenvolvidos para a mesa sísmica. A primeira secção apresenta o modo de operação principal --- movimento sinusoidal bi-axial com parâmetros configuráveis via interface web embarcada. A segunda secção descreve o pipeline Python de conversão de dados sísmicos, incluindo as estratégias de adaptação do perfil e as razões pelas quais nenhuma delas resolve as limitações mecânicas fundamentais.
+Este capítulo descreve o software e o firmware desenvolvidos para a mesa sísmica. A primeira secção apresenta o modo de operação principal - movimento sinusoidal bi-axial com parâmetros configuráveis via interface web embarcada. A segunda secção descreve o pipeline Python de conversão de dados sísmicos, incluindo as estratégias de adaptação do perfil e as razões pelas quais nenhuma delas resolve as limitações mecânicas fundamentais.
 \end{introduction}
 
 
@@ -16,7 +16,7 @@ O modo de operação principal da mesa é o movimento sinusoidal bi-axial com pa
 \subsection{Arquitetura do Firmware Web}
 \label{subsec:firmware-web}
 
-O firmware implementado no ESP32 usa exclusivamente bibliotecas do núcleo Arduino para ESP32: \texttt{WiFi.h} para a configuração da rede e \texttt{WebServer.h} para o servidor HTTP --- sem dependências externas. O ESP32 arranca em modo Access Point com as seguintes configurações:
+O firmware implementado no ESP32 usa exclusivamente bibliotecas do núcleo Arduino para ESP32: \texttt{WiFi.h} para a configuração da rede e \texttt{WebServer.h} para o servidor HTTP - sem dependências externas. O ESP32 arranca em modo Access Point com as seguintes configurações:
 
 \begin{itemize}
     \item \textbf{SSID:} \texttt{MesaSismica}
@@ -27,14 +27,14 @@ O firmware implementado no ESP32 usa exclusivamente bibliotecas do núcleo Ardui
 Qualquer dispositivo com browser (computador, tablet ou smartphone) pode ligar-se à rede \texttt{MesaSismica} e aceder à interface de controlo em \texttt{http://192.168.4.1}, sem necessidade de ligação USB ou computador externo durante o ensaio.
 
 
-\subsection{Interface Web --- Parâmetros Configuráveis}
+\subsection{Interface Web - Parâmetros Configuráveis}
 \label{subsec:interface-web}
 
 A interface web serve uma página HTML com os seguintes controlos:
 
 \begin{itemize}
     \item \textbf{Frequência (Hz):} slider para definir a frequência da oscilação sinusoidal, entre 0,5\,Hz e 10\,Hz.
-    \item \textbf{Amplitude (steps):} slider para definir o numero máximo de passos que a mesa pode dar.
+    \item \textbf{Amplitude (steps):} slider para definir o número máximo de passos que a mesa se pode deslocar.
     \item \textbf{Intervalo (ms):} slider para definir a janela de atualização da velocidade.
     \item \textbf{Botões Start / Stop:} iniciam e interrompem o movimento sem necessidade de reconectar ou reprogramar o ESP32.
 \end{itemize}
@@ -57,7 +57,7 @@ v_{\text{EW}}(t) = A \cdot \sin\!\left(2\pi f t + \frac{\pi}{2}\right) = A \cdot
 \label{eq:vel-ew}
 \end{equation}
 
-onde $A$ é a amplitude configurada (steps/s), $f$ é a frequência configurada (Hz) e $t$ é o tempo decorrido desde o início do movimento (s). A desfasagem de 90° entre NS e EW produz um percurso elíptico (ou circular, quando a amplitude é igual nos dois eixos) da plataforma. A velocidade instantânea de cada motor é calculada a cada janela temporal e passada a \texttt{setSpeed()}, com \texttt{runSpeed()} chamado continuamente no \texttt{loop()} para distribuir os passos ao longo da janela.
+onde $A$ é a amplitude configurada (steps/s), $f$ é a frequência configurada (Hz) e $t$ é o tempo decorrido desde o início do movimento (s). A desfasagem de 90° entre NS e EW produz um percurso elíptico (ou circular, quando a amplitude é igual nos dois eixos) da plataforma. A velocidade instantânea de cada motor é calculada a cada janela temporal e passada a \texttt{setSpeed()}, com \texttt{runSpeed()}~\cite{AccelStepper} chamado continuamente no \texttt{loop()} para distribuir os passos ao longo da janela.
 
 O Código~\ref{lbl:firmware-web} ilustra a estrutura do ciclo de controlo do firmware Web:
 
@@ -109,17 +109,17 @@ O modo de frequência variável foi validado experimentalmente: a plataforma exe
 \section{Pipeline de Dados Sísmicos: Análise e Validação das Limitações}
 \label{sec:pipeline-dados}
 
-O pipeline de dados sísmicos é o elo entre os dados históricos do registo de El Centro e o movimento físico da plataforma. O processo tem três etapas: obtenção e preparação dos dados de deslocamento em formato CSV, conversão para sequências de passos de motor por um script Python e geração dos arrays C++ a embutir no firmware. Este pipeline corre em modo \textit{offline} e foi desenvolvido para validação do pipeline de conversão e análise das limitações mecânicas do sistema --- não constitui o modo de operação da mesa.
+O pipeline de dados sísmicos é o elo entre os dados históricos do registo de El Centro e o movimento físico da plataforma. O processo tem três etapas: obtenção e preparação dos dados de deslocamento em formato CSV, conversão para sequências de passos de motor por um script Python e geração dos arrays C++ a embutir no firmware. Este pipeline corre em modo \textit{offline} e foi desenvolvido para validação do pipeline de conversão e análise das limitações mecânicas do sistema - não constitui o modo de operação da mesa.
 
 
-\subsection{Fonte de Dados --- Registo de El Centro}
+\subsection{Fonte de Dados - Registo de El Centro}
 \label{subsec:fonte-dados}
 
-O registo sísmico de El Centro de 1940, formalmente designado por \textit{Imperial Valley Earthquake} de 18 de maio de 1940, é um dos registos acelerométricos mais utilizados e documentados na literatura de engenharia sísmica. Com uma magnitude de aproximadamente 6,9 na escala de Richter, o sismo afetou a região do Imperial Valley, na Califórnia (EUA). O registo obtido na estação de El Centro (Imperial Valley Irrigation District) tornou-se referência na literatura de engenharia sísmica experimental, por ter sido um dos primeiros registos de forte movimento do solo com qualidade instrumental adequada e por abranger uma gama de frequências relevante para estruturas de edifícios correntes.
+O registo sísmico de El Centro de 1940, formalmente designado por \textit{Imperial Valley Earthquake} de 18 de maio de 1940~\cite{ElCentro1940}, é um dos registos acelerométricos mais utilizados e documentados na literatura de engenharia sísmica. Com uma magnitude de aproximadamente 6,9 na escala de Richter, o sismo afetou a região do Imperial Valley, na Califórnia (EUA). O registo obtido na estação de El Centro (Imperial Valley Irrigation District) tornou-se referência na literatura de engenharia sísmica experimental, por ter sido um dos primeiros registos de forte movimento do solo com qualidade instrumental adequada e por abranger uma gama de frequências relevante para estruturas de edifícios correntes.
 
 O registo é composto por duas componentes horizontais ortogonais: Norte-Sul (NS) e Este-Oeste (EW), cada uma disponível em séries temporais de aceleração, velocidade e deslocamento do solo, com um intervalo de amostragem de 20\,ms. Para o presente projeto, foram utilizados os dados de deslocamento (em metros), por serem a grandeza diretamente relevante para o controlo de posição da plataforma. O ficheiro NS apresenta 2687 amostras e o ficheiro EW apresenta 2673, o que corresponde a aproximadamente 53 segundos de registo sísmico.
 
-Os dados sísmicos utilizados foram fornecidos pelo orientador do projeto, Professor Vítor Silva, sob a forma de um ficheiro Microsoft Excel (\texttt{.xlsx}), denominado \texttt{elcentro\_eq\_disp.xlsx}. O ficheiro continha duas folhas de cálculo, uma para cada componente horizontal do registo: Norte-Sul (NS) e Este-Oeste (EW). Cada folha apresentava três colunas: tempo (em segundos), aceleração (em m/s\textsuperscript{2}) e deslocamento (em metros), com um intervalo de amostragem de 20\,ms. Os dados de deslocamento foram utilizados diretamente pelo script Python, sem necessidade de integração numérica adicional, uma vez que o ficheiro já continha os valores de deslocamento processados.
+Os dados sísmicos utilizados foram fornecidos pelo orientador do projeto, Professor Vítor Silva, sob a forma de um ficheiro Microsoft Excel (\texttt{.xlsx}), denominado \texttt{elcentro\_eq\_disp.xlsx}~\cite{PEERDatabase}. O ficheiro continha duas folhas de cálculo, uma para cada componente horizontal do registo: Norte-Sul (NS) e Este-Oeste (EW). Cada folha apresentava três colunas: tempo (em segundos), aceleração (em m/s\textsuperscript{2}) e deslocamento (em metros), com um intervalo de amostragem de 20\,ms. Os dados de deslocamento foram utilizados diretamente pelo script Python, sem necessidade de integração numérica adicional, uma vez que o ficheiro já continha os valores de deslocamento processados.
 
 \subsection{Conversão de Deslocamento para Passos de Motor (Python)}
 \label{subsec:conversao-python}
@@ -204,7 +204,7 @@ def steps_calc(data1, data2, max_steps_per_window=50, max_position=2500,
 \label{lbl:pipeline-python}
 \end{listing}
 
-\subsection{Parâmetros --- Lead do Fuso, Microstepping, Steps por Revolução}
+\subsection{Parâmetros - Lead do Fuso, Microstepping, Steps por Revolução}
 \label{subsec:parametros-conversao}
 
 A Tabela~\ref{tab:parametros-conversao} resume os parâmetros fixos e configuráveis do pipeline de conversão, com os respetivos valores e significado físico.
@@ -238,12 +238,12 @@ Amostras EW (El Centro) & 2673 & Duração $\approx$ 53,5\,s \\
 \subsection{Estratégias de Adaptação do Perfil Sísmico}
 \label{subsec:estrategias-adaptacao}
 
-Para tentar viabilizar a execução do perfil sísmico sem perda de passo, foram analisadas três estratégias de adaptação do sinal. Nenhuma resolve o problema de fundo --- apenas muda a forma como o perfil é distorcido.
+Para tentar viabilizar a execução do perfil sísmico sem perda de passo, foram analisadas três estratégias de adaptação do sinal. Nenhuma resolve o problema de fundo - apenas muda a forma como o perfil é distorcido.
 
-\textbf{Fator de ajuste ($f_{\text{ajuste}} < 1$):} variável de escala multiplicativa aplicada a todos os $\Delta\text{steps}$ (Equação~\ref{eq:steps}). Com $f_{\text{ajuste}} < 1$, a amplitude global do movimento é atenuada, mas a relação temporal entre amostras mantém-se, preservando o perfil dinâmico relativo do sismo. A desvantagem é que, com um $f_{\text{ajuste}}$ suficientemente baixo para evitar perda de passo, o deslocamento real da plataforma fica na ordem dos décimos de milímetro --- imperceptível e sem significado para ensaio de modelos estruturais.
+\textbf{Fator de ajuste ($f_{\text{ajuste}} < 1$):} variável de escala multiplicativa aplicada a todos os $\Delta\text{steps}$ (Equação~\ref{eq:steps}). Com $f_{\text{ajuste}} < 1$, a amplitude global do movimento é atenuada, mas a relação temporal entre amostras mantém-se, preservando o perfil dinâmico relativo do sismo. A desvantagem é que, com um $f_{\text{ajuste}}$ suficientemente baixo para evitar perda de passo, o deslocamento real da plataforma fica a uma velocidade estremamente baixa - imperceptível e sem significado para ensaio de modelos estruturais.
 
 \textbf{Clamping (\texttt{max\_steps\_per\_window}):} limitação do valor absoluto de steps por janela a um máximo predefinido. Esta abordagem preserva os picos de baixa amplitude mas trunca os picos mais intensos, distorcendo precisamente o conteúdo em frequência e amplitude que é mais relevante para a resposta estrutural.
 
-\textbf{Subsampling:} redução da frequência de atualização, executando apenas 1 em cada $N$ amostras consecutivas. Equivale a reproduzir o sismo em câmara lenta: com $N = 4$, o perfil é executado a um quarto da velocidade real. Os motores conseguem acompanhar --- mas um sismo reproduzido 4$\times$ mais lento não é um sismo: as frequências de excitação baixam para fora da gama de ressonância típica de estruturas, e o ensaio perde validade sísmica.
+\textbf{Subsampling:} redução da frequência de atualização, executando apenas 1 em cada $N$ amostras consecutivas. Equivale a reproduzir o sismo em câmara lenta: com $N = 4$, o perfil é executado a um quarto da velocidade real. Os motores conseguem acompanhar - mas um sismo reproduzido 4$\times$ mais lento não é um sismo: as frequências de excitação baixam para fora da gama de ressonância típica de estruturas, e o ensaio perde validade sísmica.
 
 Apesar destas estratégias, a análise experimental revelou que o sistema, nas condições atuais, não consegue reproduzir o registo sísmico de El Centro à escala temporal real. As razões mecânicas são analisadas em detalhe no Capítulo~\ref{chapter:validation}.

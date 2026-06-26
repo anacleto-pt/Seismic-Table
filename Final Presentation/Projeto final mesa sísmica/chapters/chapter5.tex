@@ -1,6 +1,6 @@
 
 
-\chapter{Hardware --- Design e Implementação}
+\chapter{Hardware - Design e Implementação}
 \label{chapter:hardware}
 
 \begin{introduction}
@@ -56,7 +56,7 @@ As peças estruturais são impressas em PLA. As principais são a base fixa (com
 %  \label{fig:modelo-3d}
 % \end{figure}
 
-\section{Sistema de Atuação --- Motores NEMA17}
+\section{Sistema de Atuação - Motores NEMA17}
 \label{sec:sistema-atuacao}
 
 \subsection{Características dos Motores de Passo}
@@ -92,7 +92,7 @@ onde $\Delta\text{steps}$ é o número de passos na janela temporal de 20\,ms, $
 Relativamente ao torque, considerando uma massa total da plataforma e do modelo de ensaio de aproximadamente 2\,kg, um coeficiente de atrito estimado de 0,15 (rótulas e fusos) e dois motores a partilhar a carga por eixo, o torque necessário por motor é estimado em cerca de 5,6\,kg.cm. Este valor excede ligeiramente o torque de retenção nominal do NEMA17-04 (4,4\,kg.cm), o que indica que a margem de segurança é reduzida com modelos próximos do limite máximo de carga. Na prática, o torque de arranque dos fusos trapezoidais é dominado pelo atrito estático, e o sistema demonstrou funcionamento estável. Recomenda-se, contudo, não exceder 1\,kg de massa do modelo de teste para garantir um funcionamento robusto.
 
 
-\section{Sistema de Controlo --- CNC Shield e Drivers DRV8825}
+\section{Sistema de Controlo - CNC Shield e Drivers DRV8825}
 \label{sec:sistema-controlo}
 
 O ESP32 comunica com os quatro drivers DRV8825 através da CNC Shield, que centraliza os sinais STEP, DIR e EN e simplifica a cablagem. A alimentação dos motores, proveniente de uma fonte DC externa, é separada da alimentação lógica do ESP32, para evitar ruído nos sinais de controlo.
@@ -137,14 +137,14 @@ O módulo ESP32 utilizado está ilustrado na Figura~\ref{fig:esp32-anexo} (Anexo
 Os sinais STEP e DIR seguem a convenção padrão dos motores de passo: o pino DIR define o sentido de rotação (HIGH ou LOW) e cada flanco ascendente no pino STEP avança o motor um passo (ou sub-passo em modo \textit{microstepping}). A biblioteca AccelStepper gere automaticamente estes sinais com base nas instruções de velocidade recebidas pelo firmware.
 
 
-\section{Microcontrolador --- ESP32}
+\section{Microcontrolador - ESP32}
 \label{sec:microcontrolador}
 
 % TODO: Inserir foto do módulo Joy-IT NodeMCU-ESP32-C.
 \begin{figure}[h]
  \centering
  \includegraphics[width=0.4\textwidth]{figs/esp_con.png}
- \caption{Mapa de conecções entre ESP e CNC Shield.}
+ \caption{Mapa de conexões entre ESP e CNC Shield.}
  \label{fig:esp32}
 \end{figure}
 
